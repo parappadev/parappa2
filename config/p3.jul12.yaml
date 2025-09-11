@@ -461,4 +461,13 @@ segments:
         - { type: bss,   vram: 0x01c88500, name: sdk/scelib           }
         - { type: bss,   vram: 0x01c8df00, name: sdk/newlib           }
 
-    - [0x299A00]
+    - [0x299A00, databin] # pad
+
+    - name: mfifo
+      type: code
+      start: 0x29A000
+      vram: 0x01C90000
+      subsegments:
+        - [0x29A000, databin, mfifo/mfifo]
+
+    - [0x2AA000]
