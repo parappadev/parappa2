@@ -4,10 +4,15 @@ versions:
 - name: proto
   fullname: July 12 prototype
   paths:
-    baserom: "iso/SCPS_150.17"
-    build: "build/SCPS_150.17"
+    target: "iso/SCPS_150.17.rom"
+
+    build_dir: "build/"
+    map: "build/SCPS_150.17.map"
+    compiled_target: "build/SCPS_150.17.rom"
+    elf: "build/SCPS_150.17.elf"
+
+    expected_dir: "expected/"
+
     asm: "asm"
     nonmatchings: "asm/nonmatchings"
-    map: "build/SCPS_150.17.map"
-    elf: "build/SCPS_150.17"
 tools:
