@@ -1,153 +1,153 @@
 // sdk/crt0.s: _start
-rom:0x1034 symbol:_gp reloc:MIPS_HI16
-rom:0x1048 symbol:_gp reloc:MIPS_LO16
+rom:0x34 symbol:_gp reloc:MIPS_HI16
+rom:0x48 symbol:_gp reloc:MIPS_LO16
 
 //
 // os/mtc.c
 //
 
 // MtcInit
-rom:0x2660 symbol:_gp reloc:MIPS_HI16
-rom:0x2664 symbol:_gp reloc:MIPS_LO16
+rom:0x1660 symbol:_gp reloc:MIPS_HI16
+rom:0x1664 symbol:_gp reloc:MIPS_LO16
 // MtcExec
-rom:0x278c symbol:_gp reloc:MIPS_HI16
-rom:0x2790 symbol:_gp reloc:MIPS_LO16
+rom:0x178C symbol:_gp reloc:MIPS_HI16
+rom:0x1790 symbol:_gp reloc:MIPS_LO16
 
 //
 // os/usrmem.c
 //
 
 // UsrMemClear
-rom:0x4f70 symbol:usrMemoryData+0x1880000 reloc:MIPS_HI16
-rom:0x4f78 symbol:usrMemoryData reloc:MIPS_LO16
+rom:0x3F70 symbol:usrMemoryData+0x1880000 reloc:MIPS_HI16
+rom:0x3F78 symbol:usrMemoryData reloc:MIPS_LO16
 // UsrMemClearEnd
-rom:0x4fb0 symbol:usrMemoryData+0x1880000 reloc:MIPS_HI16
-rom:0x4fb8 symbol:usrMemoryData reloc:MIPS_LO16
+rom:0x3FB0 symbol:usrMemoryData+0x1880000 reloc:MIPS_HI16
+rom:0x3FB8 symbol:usrMemoryData reloc:MIPS_LO16
 
 //
 // os/cdctrl.c
 //
 
 // PackIntDecode
-rom:0x61d0 symbol:none reloc:MIPS_NONE
-rom:0x6238 symbol:none reloc:MIPS_NONE
+rom:0x51D0 symbol:none reloc:MIPS_NONE
+rom:0x5238 symbol:none reloc:MIPS_NONE
 // PackIntDecodeWait
-rom:0x6354 symbol:none reloc:MIPS_NONE
-rom:0x63c8 symbol:none reloc:MIPS_NONE
+rom:0x5354 symbol:none reloc:MIPS_NONE
+rom:0x53C8 symbol:none reloc:MIPS_NONE
 
 //
 // main/scrctrl.c
 //
 
 // subjobEvent
-rom:0xd83c symbol:pad reloc:MIPS_HI16
-rom:0xd854 symbol:pad reloc:MIPS_HI16
-rom:0xd86c symbol:pad reloc:MIPS_HI16
-rom:0xd880 symbol:pad reloc:MIPS_HI16
+rom:0xC83C symbol:pad reloc:MIPS_HI16
+rom:0xC854 symbol:pad reloc:MIPS_HI16
+rom:0xC86C symbol:pad reloc:MIPS_HI16
+rom:0xC880 symbol:pad reloc:MIPS_HI16
 // exh_str_original
-rom:0x842d4 symbol:none reloc:MIPS_NONE
+rom:0x832D4 symbol:none reloc:MIPS_NONE
 // exh_str_hane
-rom:0x84304 symbol:none reloc:MIPS_NONE
+rom:0x83304 symbol:none reloc:MIPS_NONE
 // bn_num_type
-rom:0x84be0 symbol:none reloc:MIPS_NONE
-rom:0x84c04 symbol:none reloc:MIPS_NONE
-rom:0x84c08 symbol:none reloc:MIPS_NONE
-rom:0x84c0c symbol:none reloc:MIPS_NONE
+rom:0x83BE0 symbol:none reloc:MIPS_NONE
+rom:0x83C04 symbol:none reloc:MIPS_NONE
+rom:0x83C08 symbol:none reloc:MIPS_NONE
+rom:0x83C0C symbol:none reloc:MIPS_NONE
 
 // main/subt.c: SubtMsgPrint
-rom:0x10df4 symbol:mcode_ascii-0x140 reloc:MIPS_HI16
-rom:0x10df8 symbol:mcode_ascii-0x140 reloc:MIPS_LO16
+rom:0xFDF4 symbol:mcode_ascii-0x140 reloc:MIPS_HI16
+rom:0xFDF8 symbol:mcode_ascii-0x140 reloc:MIPS_LO16
 
 // main/effect.c: FD_MonocroDisp
-rom:0x19090 symbol:none reloc:MIPS_NONE
+rom:0x18090 symbol:none reloc:MIPS_NONE
 
 //
 // menu/menusub.c
 //
 
 // FussenWAIT0
-rom:0x8cac8 symbol:none reloc:MIPS_NONE
+rom:0x8BAC8 symbol:none reloc:MIPS_NONE
 // FussenWAIT1
-rom:0x8cad8 symbol:none reloc:MIPS_NONE
+rom:0x8BAD8 symbol:none reloc:MIPS_NONE
 // LoadConfLst
-rom:0x8cae8 symbol:none reloc:MIPS_NONE
-rom:0x8caec symbol:none reloc:MIPS_NONE
+rom:0x8BAE8 symbol:none reloc:MIPS_NONE
+rom:0x8BAEC symbol:none reloc:MIPS_NONE
 // LG_SCROLL_MARK
-rom:0x8cd40 symbol:none reloc:MIPS_NONE
+rom:0x8BD40 symbol:none reloc:MIPS_NONE
 // RP_SCROLL_MARK
-rom:0x8cd58 symbol:none reloc:MIPS_NONE
+rom:0x8BD58 symbol:none reloc:MIPS_NONE
 // LLG_SCROLL_MARK
-rom:0x8cd70 symbol:none reloc:MIPS_NONE
+rom:0x8BD70 symbol:none reloc:MIPS_NONE
 // CSSLASH_MARK
-rom:0x8cd7c symbol:none reloc:MIPS_NONE
+rom:0x8BD7C symbol:none reloc:MIPS_NONE
 // PAGENO_StrCOD
-rom:0x8cd88 symbol:none reloc:MIPS_NONE
-rom:0x8cd90 symbol:none reloc:MIPS_NONE
+rom:0x8BD88 symbol:none reloc:MIPS_NONE
+rom:0x8BD90 symbol:none reloc:MIPS_NONE
 // MNOptObj_Subt
-rom:0x8cfe0 symbol:none reloc:MIPS_NONE
-rom:0x8cff0 symbol:none reloc:MIPS_NONE
+rom:0x8BFE0 symbol:none reloc:MIPS_NONE
+rom:0x8BFF0 symbol:none reloc:MIPS_NONE
 // MNOptObj_Vibr
-rom:0x8d000 symbol:none reloc:MIPS_NONE
-rom:0x8d010 symbol:none reloc:MIPS_NONE
+rom:0x8C000 symbol:none reloc:MIPS_NONE
+rom:0x8C010 symbol:none reloc:MIPS_NONE
 // MNOptObj_Oneb
-rom:0x8d020 symbol:none reloc:MIPS_NONE
-rom:0x8d030 symbol:none reloc:MIPS_NONE
+rom:0x8C020 symbol:none reloc:MIPS_NONE
+rom:0x8C030 symbol:none reloc:MIPS_NONE
 // UserName_InitialStr2
-rom:0x29a74c symbol:D_00395F20 reloc:MIPS_32
+rom:0x29974C symbol:D_00395F20 reloc:MIPS_32
 
 //
 // menu/p3mc.c
 //
 
 // P3MC_GetUserCheck
-rom:0x3a2c4 symbol:none reloc:MIPS_NONE
-rom:0x3a2e0 symbol:none reloc:MIPS_NONE
+rom:0x392C4 symbol:none reloc:MIPS_NONE
+rom:0x392E0 symbol:none reloc:MIPS_NONE
 // P3MC_SortUser
-rom:0x3ab54 symbol:none reloc:MIPS_NONE
-rom:0x3ab78 symbol:none reloc:MIPS_NONE
+rom:0x39B54 symbol:none reloc:MIPS_NONE
+rom:0x39B78 symbol:none reloc:MIPS_NONE
 
 // FooterID
-rom:0x29a834 symbol:D_00396190 reloc:MIPS_32
+rom:0x299834 symbol:D_00396190 reloc:MIPS_32
 
 // menu/pksprite.c: _PkDefSCISSOR
-rom:0x29a8a4 symbol:none reloc:MIPS_NONE
+rom:0x2998A4 symbol:none reloc:MIPS_NONE
 
 // prlib/microprogram.cpp: CalculateEntryPoint
-rom:0x47dcc symbol:vump_top reloc:MIPS_HI16
-rom:0x47dd0 symbol:vump_top reloc:MIPS_LO16
+rom:0x46DCC symbol:vump_top reloc:MIPS_HI16
+rom:0x46DD0 symbol:vump_top reloc:MIPS_LO16
 
 // prlib/spram.cpp: dmaTagTemplate.1864
-rom:0x28d718 symbol:none reloc:MIPS_NONE
+rom:0x28C718 symbol:none reloc:MIPS_NONE
 
 // prlib/menderer.cpp: initRenderStripDmaPacket
-rom:0x28d7c4 symbol:none reloc:MIPS_NONE
+rom:0x28C7C4 symbol:none reloc:MIPS_NONE
 
 // prlib/mendereralpha.cpp: mendererDrawCopyData
-rom:0x28dd00 symbol:none reloc:MIPS_NONE
-rom:0x28dd50 symbol:none reloc:MIPS_NONE
+rom:0x28CD00 symbol:none reloc:MIPS_NONE
+rom:0x28CD50 symbol:none reloc:MIPS_NONE
 
 // sdk/thread.c: InitThread
-rom:0x6225c symbol:_gp reloc:MIPS_HI16
-rom:0x62268 symbol:_gp reloc:MIPS_LO16
+rom:0x6125C symbol:_gp reloc:MIPS_HI16
+rom:0x61268 symbol:_gp reloc:MIPS_LO16
 
 // sdk/eecdvd.c: sceCdInitEeCB
-rom:0x63664 symbol:_gp reloc:MIPS_HI16
-rom:0x63670 symbol:_gp reloc:MIPS_LO16
+rom:0x62664 symbol:_gp reloc:MIPS_HI16
+rom:0x62670 symbol:_gp reloc:MIPS_LO16
 
 // sdk/glue.c: heap_ptr.30
-rom:0x28e058 symbol:_end reloc:MIPS_32
+rom:0x28D058 symbol:_end reloc:MIPS_32
 
 //
 // newlib
 //
-rom:0x290388 symbol:__DTOR_LIST__ reloc:MIPS_32 addend:0x4
-rom:0x2906d4 symbol:none reloc:MIPS_NONE
-rom:0x290990 symbol:none reloc:MIPS_NONE
-rom:0x290b84 symbol:none reloc:MIPS_NONE
-rom:0x290dc8 symbol:none reloc:MIPS_NONE
-rom:0x290e10 symbol:none reloc:MIPS_NONE
-rom:0x290e64 symbol:none reloc:MIPS_NONE
-rom:0x290eac symbol:none reloc:MIPS_NONE
-rom:0x291000 symbol:none reloc:MIPS_NONE
-rom:0x291340 symbol:none reloc:MIPS_NONE
-rom:0x291420 symbol:none reloc:MIPS_NONE
+rom:0x28F388 symbol:__DTOR_LIST__ reloc:MIPS_32 addend:0x4
+rom:0x28F6D4 symbol:none reloc:MIPS_NONE
+rom:0x28F990 symbol:none reloc:MIPS_NONE
+rom:0x28FB84 symbol:none reloc:MIPS_NONE
+rom:0x28FDC8 symbol:none reloc:MIPS_NONE
+rom:0x28FE10 symbol:none reloc:MIPS_NONE
+rom:0x28FE64 symbol:none reloc:MIPS_NONE
+rom:0x28FEAC symbol:none reloc:MIPS_NONE
+rom:0x290000 symbol:none reloc:MIPS_NONE
+rom:0x290340 symbol:none reloc:MIPS_NONE
+rom:0x290420 symbol:none reloc:MIPS_NONE

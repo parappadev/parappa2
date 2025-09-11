@@ -1,381 +1,380 @@
 name: PaRappa the Rapper 2 (NTSC-J) (July 12th prototype)
-sha1: fa7b1d19c68c4d4f06cf3047a05f2b5daaae2a1e
+sha1: e693c3968afc22dfcb4cc4529aceb7c4f4921a94
 options:
     # paths
     basename: SCPS_150.17
-    target_path: iso/SCPS_150.17
+    target_path: iso/SCPS_150.17.rom
     base_path: ..
-    
+
     asm_path: asm
     src_path: src
     build_path: build
-    
+
     extensions_path: tools/splat_ext
     symbol_addrs_path: config/p3.jul12.symbol_addrs.txt
     reloc_addrs_path:  config/p3.jul12.reloc_addrs.txt
     undefined_funcs_auto_path: config/p3.jul12.undefined_funcs_auto.txt
     undefined_syms_auto_path:  config/p3.jul12.undefined_syms_auto.txt
-    
-    # compiler 
+
+    # compiler
     compiler: EEGCC
     platform: ps2
 
     use_gp_rel_macro_nonmatching: False # Disable %gp_rel emission
     make_full_disasm_for_code: True
     ld_bss_contains_common: True
-    
+
     string_encoding: EUC-JP
     rodata_string_guesser_level: 2 # Improve string detection
     disasm_unknown: True
     named_regs_for_c_funcs: False
     gp_value: 0x3a0ef0
     subalign: null
-    
+
     find_file_boundaries: False
     section_order: [".text", ".data", ".rodata", ".lit4", ".sdata", ".sbss", ".bss"]
 segments:
-    - [0, databin, elf_header]
     - name: main
       type: code
-      start: 0x1000
+      start: 0x0
       vram: 0x100000
       bss_size: 0x18f4634
       subsegments:
         # .text
-        - [0x1000,  asm, sdk/crt0]
-        - [0x10c8,  asm, sdk/tmp]
-        
-        - [0x1130,  c, dbug/dbgmsg]
-        - [0x1838,  c, dbug/syori]
-        - [0x1858,  c, dbug/vramsave]
-        
-        - [0x24a0,  c, os/mtc]
-        - [0x29a0,  c, os/syssub]
-        - [0x40a8,  c, os/system]
-        - [0x4850,  c, os/cmngifpk]
-        - [0x4f68,  c, os/usrmem]
-        - [0x5330,  c, os/tim2]
+        - [0x0,  asm, sdk/crt0]
+        - [0xC8,  asm, sdk/tmp]
 
-        - [0x6120,  c, main/cdctrl]
-        - [0x7d70,  c, main/stdat]
-        - [0x7f28,  c, main/scrctrl]
-        - [0x10028, c, main/sprite]
-        - [0x10980, c, main/fadectrl]
-        - [0x10a90, c, main/subt]
-        - [0x115e8, c, main/drawctrl]
-        - [0x17b70, c, main/effect]
-        - [0x19160, c, main/mbar]
-        - [0x1ccc8, c, main/pack]
-        - [0x1cec0, c, main/etc]
-        - [0x1dd58, c, main/wipe]
-        - [0x1fce8, c, main/mcctrl]
-        - [0x20720, c, main/main]
-        - [0x22dc8, c, main/cmnfile]
-        - [0x22f68, c, main/p3str]
-        - [0x23c50, c, main/commake]
+        - [0x130,  c, dbug/dbgmsg]
+        - [0x838,  c, dbug/syori]
+        - [0x858,  c, dbug/vramsave]
 
-        - [0x24a10, c, menu/menu]
-        - [0x24d98, c, menu/menudata]
-        - [0x25500, c, menu/menu_mdl]
-        - [0x26ec0, c, menu/menusub]
-        - [0x38f70, c, menu/p3mc]
-        - [0x3bd80, c, menu/memc]
-        - [0x3dbf0, c, menu/mntm2hed]
-        - [0x3dc08, c, menu/menufont]
-        - [0x3ec08, c, menu/pksprite]
+        - [0x14A0,  c, os/mtc]
+        - [0x19A0,  c, os/syssub]
+        - [0x30A8,  c, os/system]
+        - [0x3850,  c, os/cmngifpk]
+        - [0x3F68,  c, os/usrmem]
+        - [0x4330,  c, os/tim2]
 
-        - [0x40db8, c, iop_mdl/wp2cd_rpc]
-        - [0x41010, c, iop_mdl/tapctrl_rpc]
+        - [0x5120,  c, main/cdctrl]
+        - [0x6D70,  c, main/stdat]
+        - [0x6F28,  c, main/scrctrl]
+        - [0xF028, c, main/sprite]
+        - [0xF980, c, main/fadectrl]
+        - [0xFA90, c, main/subt]
+        - [0x105E8, c, main/drawctrl]
+        - [0x16B70, c, main/effect]
+        - [0x18160, c, main/mbar]
+        - [0x1BCC8, c, main/pack]
+        - [0x1BEC0, c, main/etc]
+        - [0x1CD58, c, main/wipe]
+        - [0x1ECE8, c, main/mcctrl]
+        - [0x1F720, c, main/main]
+        - [0x21DC8, c, main/cmnfile]
+        - [0x21F68, c, main/p3str]
+        - [0x22C50, c, main/commake]
+
+        - [0x23A10, c, menu/menu]
+        - [0x23D98, c, menu/menudata]
+        - [0x24500, c, menu/menu_mdl]
+        - [0x25EC0, c, menu/menusub]
+        - [0x37F70, c, menu/p3mc]
+        - [0x3AD80, c, menu/memc]
+        - [0x3CBF0, c, menu/mntm2hed]
+        - [0x3CC08, c, menu/menufont]
+        - [0x3DC08, c, menu/pksprite]
+
+        - [0x3FDB8, c, iop_mdl/wp2cd_rpc]
+        - [0x40010, c, iop_mdl/tapctrl_rpc]
 
         # prlib/nalib
-        - [0x41130, cpp, prlib/gifreg]
-        - [0x41868, cpp, prlib/model]
+        - [0x40130, cpp, prlib/gifreg]
+        - [0x40868, cpp, prlib/model]
           # - [0x41e38, asm, nalib/navector] # Header
-        - [0x41e60, cpp, prlib/database]
+        - [0x40E60, cpp, prlib/database]
         # - [0x42078, asm, prlib/objectset] # Header
-        - [0x420d8, cpp, prlib/renderstuff]
+        - [0x410D8, cpp, prlib/renderstuff]
           # - [0x42650, asm, prlib/renderstuff] # Header
-        - [0x42658, cpp, prlib/prlib]
-        - [0x430b8, cpp, prlib/setpointer]
-        - [0x43820, cpp, prlib/render]
+        - [0x41658, cpp, prlib/prlib]
+        - [0x420B8, cpp, prlib/setpointer]
+        - [0x42820, cpp, prlib/render]
           # - [0x46db0, asm, nalib/navector] # Header
-        - [0x471d0, cpp, prlib/renderee]
+        - [0x461D0, cpp, prlib/renderee]
           # - [0x47a08, asm, prlib/renderstuff] # Header
-        - [0x47a10, cpp, prlib/transition]
-        - [0x47dc8, cpp, prlib/microprogram]
-        - [0x47f40, cpp, prlib/spram]
+        - [0x46A10, cpp, prlib/transition]
+        - [0x46DC8, cpp, prlib/microprogram]
+        - [0x46F40, cpp, prlib/spram]
           # - [0x48ce0, asm, nalib/navector] # Header
             # prlib/spram.cpp global constructor
           # - [0x48e38, asm, nalib/navector] # Header
-        - [0x49350, cpp, prlib/mfifo]
-        - [0x49590, cpp, prlib/spadata]
+        - [0x48350, cpp, prlib/mfifo]
+        - [0x48590, cpp, prlib/spadata]
           # - [0x4a168, asm, nalib/navector] # Header
           # - [0x4bbe0, asm, nalib/navector] # Header
-        - [0x4c188, cpp, prlib/scene]
+        - [0x4B188, cpp, prlib/scene]
           # - [0x4c988, asm, nalib/navector] # Header
           # - [0x4c9d8, asm, prlib/objectset] # Header
-        - [0x4c9f8, cpp, prlib/cluster]
-        - [0x4cd18, cpp, prlib/shape]
-        - [0x4d200, cpp, prlib/billboard]
+        - [0x4B9F8, cpp, prlib/cluster]
+        - [0x4BD18, cpp, prlib/shape]
+        - [0x4C200, cpp, prlib/billboard]
           # - [0x4d4e8, asm, nalib/navector] # Header
-        - [0x4d8e8, cpp, prlib/depthfield]
+        - [0x4C8E8, cpp, prlib/depthfield]
           # - [0x4dd38, asm, nalib/napacket] # Header
-        - [0x4ddd0, cpp, prlib/vram]
+        - [0x4CDD0, cpp, prlib/vram]
           # - [0x4e668, asm, nalib/napacket] # Header
-        - [0x4e8e0, cpp, prlib/random]
-        - [0x4ea40, cpp, prlib/menderer]
+        - [0x4D8E0, cpp, prlib/random]
+        - [0x4DA40, cpp, prlib/menderer]
           # - [0x503b8, asm, nalib/navector] # Header
           # - [0x504c8, asm, nalib/navector] # Header
-        - [0x509d0, cpp, prlib/menderercreate]
-        - [0x514c8, cpp, prlib/mendererawful]
+        - [0x4F9D0, cpp, prlib/menderercreate]
+        - [0x504C8, cpp, prlib/mendererawful]
           # - [0x51ce8, asm, nalib/navector] # Header
-        - [0x51d68, cpp, prlib/mendereralpha]
-        - [0x52270, cpp, prlib/mendererdata]
+        - [0x50D68, cpp, prlib/mendereralpha]
+        - [0x51270, cpp, prlib/mendererdata]
           # - [0x52d78, asm, nalib/navector] # Header
-        - [0x52e20, cpp, prlib/wave]
-        - [0x533f0, cpp, prlib/dmaqueue]
-        - [0x53750, cpp, prlib/utility]
-        - [0x53790, cpp, prlib/tim2]
-        - [0x54840, cpp, prlib/animation]
-        - [0x54888, cpp, prlib/camera]
+        - [0x51E20, cpp, prlib/wave]
+        - [0x523F0, cpp, prlib/dmaqueue]
+        - [0x52750, cpp, prlib/utility]
+        - [0x52790, cpp, prlib/tim2]
+        - [0x53840, cpp, prlib/animation]
+        - [0x53888, cpp, prlib/camera]
           # - [0x54ad0, asm, nalib/navector] # Header
-        - [0x54e80, cpp, prlib/contour]
-        - [0x553e8, cpp, prlib/dma]
+        - [0x53E80, cpp, prlib/contour]
+        - [0x543E8, cpp, prlib/dma]
           # - [0x554a8, asm, nalib/navector] # Header
-        - [0x554a8, cpp, nalib/navector]
+        - [0x544A8, cpp, nalib/navector]
 
-        - [0x55b58, asm, sdk/graphdev]
-        - [0x57af0, asm, sdk/libdma]
-        - [0x585c0, asm, sdk/devvu0]
-        - [0x589d0, asm, sdk/devvif0]
-        - [0x58d00, asm, sdk/libgifpk]
-        - [0x59058, asm, sdk/libpad]
-        - [0x5a400, asm, sdk/klib]
-        - [0x5ac90, asm, sdk/glue]
-        - [0x5afc8, asm, sdk/cache]
-        - [0x5b248, asm, sdk/intr]
-        - [0x5b5a8, asm, sdk/tty]
-        - [0x5bac8, asm, sdk/kprintf]
-        - [0x5c440, asm, sdk/sifcmd]
-        - [0x5cb88, asm, sdk/sifrpc]
-        - [0x5dae8, asm, sdk/filestub]
-        - [0x61060, asm, sdk/eeloadfile]
-        - [0x61dc0, asm, sdk/iopreset]
-        - [0x62070, asm, sdk/diei]
-        - [0x620d0, asm, sdk/initsys]
-        - [0x62140, asm, sdk/thread]
-        - [0x624a0, asm, sdk/deci2]
-        - [0x62680, asm, sdk/libvu0]
-        - [0x633c0, asm, sdk/eecdvd]
-        - [0x64b18, asm, sdk/libmc]
+        - [0x54B58, asm, sdk/graphdev]
+        - [0x56AF0, asm, sdk/libdma]
+        - [0x575C0, asm, sdk/devvu0]
+        - [0x579D0, asm, sdk/devvif0]
+        - [0x57D00, asm, sdk/libgifpk]
+        - [0x58058, asm, sdk/libpad]
+        - [0x59400, asm, sdk/klib]
+        - [0x59C90, asm, sdk/glue]
+        - [0x59FC8, asm, sdk/cache]
+        - [0x5A248, asm, sdk/intr]
+        - [0x5A5A8, asm, sdk/tty]
+        - [0x5AAC8, asm, sdk/kprintf]
+        - [0x5B440, asm, sdk/sifcmd]
+        - [0x5BB88, asm, sdk/sifrpc]
+        - [0x5CAE8, asm, sdk/filestub]
+        - [0x60060, asm, sdk/eeloadfile]
+        - [0x60DC0, asm, sdk/iopreset]
+        - [0x61070, asm, sdk/diei]
+        - [0x610D0, asm, sdk/initsys]
+        - [0x61140, asm, sdk/thread]
+        - [0x614A0, asm, sdk/deci2]
+        - [0x61680, asm, sdk/libvu0]
+        - [0x623C0, asm, sdk/eecdvd]
+        - [0x63B18, asm, sdk/libmc]
 
-        - [0x662d0, asm, sdk/newlib]
-        
+        - [0x652D0, asm, sdk/newlib]
+
         # .vutext
-        - [0x79040, databin, vutext]
-        
+        - [0x78040, databin, vutext]
+
         # .data
-        - [0x7b900, data]
-        - [0x7b970, .data, dbug/dbgmsg]
-        - [0x7c9e0, .data, dbug/vramsave]
-        - [0x7ca90, .data, os/mtc]
-        - [0x7cb40, .data, os/syssub]
-        - [0x7cbc0, .data, os/system]
-        - [0x818d8, .data, os/tim2]
+        - [0x7A900, data]
+        - [0x7A970, .data, dbug/dbgmsg]
+        - [0x7B9E0, .data, dbug/vramsave]
+        - [0x7BA90, .data, os/mtc]
+        - [0x7BB40, .data, os/syssub]
+        - [0x7BBC0, .data, os/system]
+        - [0x808D8, .data, os/tim2]
 
-        - [0x818f0, data, main/stdat]
-        - [0x84258, data, main/scrctrl]
-        - [0x85b88, .data, main/fadectrl]
-        - [0x85ba0, data, main/subt]
-        - [0x86478, data, main/drawctrl]
-        - [0x87288, data, main/mbar]
-        - [0x87f30, data, main/etc]
-        - [0x88000, data, main/wipe]
-        - [0x88400, data, main/main]
-        - [0x884f0, .data, main/commake]
+        - [0x808F0, data, main/stdat]
+        - [0x83258, data, main/scrctrl]
+        - [0x84B88, .data, main/fadectrl]
+        - [0x84BA0, data, main/subt]
+        - [0x85478, data, main/drawctrl]
+        - [0x86288, data, main/mbar]
+        - [0x86F30, data, main/etc]
+        - [0x87000, data, main/wipe]
+        - [0x87400, data, main/main]
+        - [0x874F0, .data, main/commake]
 
-        - [0x88558, data, menu/menudata]
-        - [0x896f8, data, menu/menu_mdl]
-        - [0x8c0e0, data, menu/menusub]
-        - [0x8ed90, data, menu/p3mc]
-        - [0x8edf8, data, menu/memc]
-        - [0x8f1d0, data, menu/mntm2hed]
-        - [0x90580, data, menu/menufont]
-        - [0x91430, data, menu/pksprite]
+        - [0x87558, data, menu/menudata]
+        - [0x886F8, data, menu/menu_mdl]
+        - [0x8B0E0, data, menu/menusub]
+        - [0x8DD90, data, menu/p3mc]
+        - [0x8DDF8, data, menu/memc]
+        - [0x8E1D0, data, menu/mntm2hed]
+        - [0x8F580, data, menu/menufont]
+        - [0x90430, data, menu/pksprite]
 
-        - [0x91440, databin, common_ipk] # common_ipk_start/common_ipk_end
+        - [0x90440, databin, common_ipk] # common_ipk_start/common_ipk_end
 
-        - [0x28d458, data, prlib/database]
-        - [0x28d480, data, prlib/renderstuff]
-        - [0x28d500, data, prlib/render]
-        - [0x28d580, data, prlib/renderee]
-        - [0x28d6b0, data, prlib/microprogram]
-        - [0x28d710, data, prlib/spram]
-        - [0x28d720, data, prlib/scene]
-        - [0x28d730, data, prlib/menderer]
-        - [0x28d940, data, prlib/mendererawful]
-        - [0x28db30, data, prlib/mendereralpha]
-        - [0x28dd80, .data, prlib/dma]
+        - [0x28C458, data, prlib/database]
+        - [0x28C480, data, prlib/renderstuff]
+        - [0x28C500, data, prlib/render]
+        - [0x28C580, data, prlib/renderee]
+        - [0x28C6B0, data, prlib/microprogram]
+        - [0x28C710, data, prlib/spram]
+        - [0x28C720, data, prlib/scene]
+        - [0x28C730, data, prlib/menderer]
+        - [0x28C940, data, prlib/mendererawful]
+        - [0x28CB30, data, prlib/mendereralpha]
+        - [0x28CD80, .data, prlib/dma]
 
-        - [0x28ddb0, data, nalib/napacket]
-        - [0x28ddc0, data, nalib/navector]
-        - [0x28dde0, data, nalib/namatrix]
+        - [0x28CDB0, data, nalib/napacket]
+        - [0x28CDC0, data, nalib/navector]
+        - [0x28CDE0, data, nalib/namatrix]
 
-        - [0x28def0, data, sdk/graphdev]
-        - [0x28df40, data, sdk/libdma]
-        - [0x28dff0, data, sdk/libgifpk]
-        - [0x28e000, data, sdk/libpad]
-        - [0x28e044, data, sdk/klib]
-        - [0x28e054, data, sdk/glue]
-        - [0x28e060, data, sdk/intr]
-        - [0x28e808, data, sdk/kprintf]
-        - [0x28e810, data, sdk/sifcmd]
-        - [0x28e814, data, sdk/sifrpc]
-        - [0x28e818, data, sdk/filestub]
-        - [0x28e8ac, data, sdk/eeloadfile]
-        - [0x28e8b4, data, sdk/initsys]
-        - [0x28e8bc, data, sdk/thread]
-        - [0x28e8c0, data, sdk/libvu0]
-        - [0x28e900, data, sdk/eecdvd]
-        - [0x290370, data, sdk/libmc]
+        - [0x28CEF0, data, sdk/graphdev]
+        - [0x28CF40, data, sdk/libdma]
+        - [0x28CFF0, data, sdk/libgifpk]
+        - [0x28D000, data, sdk/libpad]
+        - [0x28D044, data, sdk/klib]
+        - [0x28D054, data, sdk/glue]
+        - [0x28D060, data, sdk/intr]
+        - [0x28D808, data, sdk/kprintf]
+        - [0x28D810, data, sdk/sifcmd]
+        - [0x28D814, data, sdk/sifrpc]
+        - [0x28D818, data, sdk/filestub]
+        - [0x28D8AC, data, sdk/eeloadfile]
+        - [0x28D8B4, data, sdk/initsys]
+        - [0x28D8BC, data, sdk/thread]
+        - [0x28D8C0, data, sdk/libvu0]
+        - [0x28D900, data, sdk/eecdvd]
+        - [0x28F370, data, sdk/libmc]
 
-        - [0x290388, data, sdk/newlib]
-        
+        - [0x28F388, data, sdk/newlib]
+
         # .vudata
-        - [0x291ed0, databin, vudata]
-        
+        - [0x290ED0, databin, vudata]
+
         # .rodata
-        - [0x291f00, .rodata, dbug/dbgmsg]
-        - [0x291f20, .rodata, dbug/vramsave]
+        - [0x290F00, .rodata, dbug/dbgmsg]
+        - [0x290F20, .rodata, dbug/vramsave]
 
-        - [0x291fa0, .rodata, os/mtc]
-        - [0x291fc0, .rodata, os/syssub]
-        - [0x292760, .rodata, os/system]
-        - [0x292928, .rodata, os/cmngifpk]
-        - [0x292968, .rodata, os/usrmem]
-        - [0x292a30, .rodata, os/tim2]
+        - [0x290FA0, .rodata, os/mtc]
+        - [0x290FC0, .rodata, os/syssub]
+        - [0x291760, .rodata, os/system]
+        - [0x291928, .rodata, os/cmngifpk]
+        - [0x291968, .rodata, os/usrmem]
+        - [0x291A30, .rodata, os/tim2]
 
-        - [0x292a80, .rodata, main/cdctrl]
-        - [0x292da8, .rodata, main/stdat]
-        - [0x293a60, .rodata, main/scrctrl]
-        - [0x294018, .rodata, main/sprite]
-        - [0x294110, .rodata, main/drawctrl]
-        - [0x294400, .rodata, main/effect]
-        - [0x294430, .rodata, main/mbar]
-        - [0x294510, .rodata, main/pack]
-        - [0x294530, .rodata, main/etc]
-        - [0x294638, .rodata, main/wipe]
-        - [0x294748, .rodata, main/mcctrl]
-        - [0x294810, .rodata, main/main]
-        - [0x294b48, .rodata, main/cmnfile]
-        - [0x294b60, .rodata, main/p3str]
+        - [0x291A80, .rodata, main/cdctrl]
+        - [0x291DA8, .rodata, main/stdat]
+        - [0x292A60, .rodata, main/scrctrl]
+        - [0x293018, .rodata, main/sprite]
+        - [0x293110, .rodata, main/drawctrl]
+        - [0x293400, .rodata, main/effect]
+        - [0x293430, .rodata, main/mbar]
+        - [0x293510, .rodata, main/pack]
+        - [0x293530, .rodata, main/etc]
+        - [0x293638, .rodata, main/wipe]
+        - [0x293748, .rodata, main/mcctrl]
+        - [0x293810, .rodata, main/main]
+        - [0x293B48, .rodata, main/cmnfile]
+        - [0x293B60, .rodata, main/p3str]
 
-        - [0x294c00, .rodata, menu/menudata]
-        - [0x296f10, .rodata, menu/menusub]
-        - [0x297180, .rodata, menu/p3mc]
-        - [0x297650, .rodata, menu/memc]
-        - [0x2976e0, .rodata, menu/pksprite]
+        - [0x293C00, .rodata, menu/menudata]
+        - [0x295F10, .rodata, menu/menusub]
+        - [0x296180, .rodata, menu/p3mc]
+        - [0x296650, .rodata, menu/memc]
+        - [0x2966E0, .rodata, menu/pksprite]
 
-        - [0x297708, .rodata, iop_mdl/wp2cd_rpc]
-        - [0x297728, .rodata, iop_mdl/tapctrl_rpc]
+        - [0x296708, .rodata, iop_mdl/wp2cd_rpc]
+        - [0x296728, .rodata, iop_mdl/tapctrl_rpc]
 
-        - [0x297748, .rodata, prlib/gifreg]
-        - [0x297770, .rodata, prlib/setpointer]
-        - [0x297790, .rodata, prlib/spram]
-        - [0x2977a0, .rodata, prlib/spadata]
-        - [0x2977e0, .rodata, prlib/menderer]
-        - [0x297800, .rodata, prlib/menderercreate]
-        - [0x297980, .rodata, prlib/mendereralpha]
-        - [0x2979a0, .rodata, prlib/wave]
-        - [0x2979b0, .rodata, prlib/tim2]
+        - [0x296748, .rodata, prlib/gifreg]
+        - [0x296770, .rodata, prlib/setpointer]
+        - [0x296790, .rodata, prlib/spram]
+        - [0x2967A0, .rodata, prlib/spadata]
+        - [0x2967E0, .rodata, prlib/menderer]
+        - [0x296800, .rodata, prlib/menderercreate]
+        - [0x296980, .rodata, prlib/mendereralpha]
+        - [0x2969A0, .rodata, prlib/wave]
+        - [0x2969B0, .rodata, prlib/tim2]
 
-        - [0x297c10, rodata, sdk/graphdev]
-        - [0x298138, rodata, sdk/libdma]
-        - [0x298150, rodata, sdk/devvu0]
-        - [0x298168, rodata, sdk/libpad]
-        - [0x2982c0, rodata, sdk/tty]
-        - [0x298330, rodata, sdk/kprintf]
-        - [0x298490, rodata, sdk/filestub]
-        - [0x298500, rodata, sdk/eeloadfile]
-        - [0x298510, rodata, sdk/iopreset]
-        - [0x298540, rodata, sdk/thread]
-        - [0x298568, rodata, sdk/eecdvd]
-        - [0x298780, rodata, sdk/libmc]
+        - [0x296C10, rodata, sdk/graphdev]
+        - [0x297138, rodata, sdk/libdma]
+        - [0x297150, rodata, sdk/devvu0]
+        - [0x297168, rodata, sdk/libpad]
+        - [0x2972C0, rodata, sdk/tty]
+        - [0x297330, rodata, sdk/kprintf]
+        - [0x297490, rodata, sdk/filestub]
+        - [0x297500, rodata, sdk/eeloadfile]
+        - [0x297510, rodata, sdk/iopreset]
+        - [0x297540, rodata, sdk/thread]
+        - [0x297568, rodata, sdk/eecdvd]
+        - [0x297780, rodata, sdk/libmc]
 
-        - [0x2987e8, rodata, sdk/newlib]
-        
+        - [0x2977E8, rodata, sdk/newlib]
+
         # .gcc_except_table
-        - [0x299d80, rodata, gcc_except_table]
+        - [0x298D80, rodata, gcc_except_table]
 
         # .lit4
-        - [0x299f00, .lit4, main/cdctrl]
-        - [0x299f10, .lit4, main/scrctrl]
-        - [0x299f14, lit4] # main/drawctrl
-        - [0x299f38, lit4, main/effect]
-        - [0x299f40, lit4] # main/mbar
+        - [0x298F00, .lit4, main/cdctrl]
+        - [0x298F10, .lit4, main/scrctrl]
+        - [0x298F14, lit4] # main/drawctrl
+        - [0x298F38, lit4, main/effect]
+        - [0x298F40, lit4] # main/mbar
 
-        - [0x299f4c, .lit4, menu/menu_mdl]
-        - [0x299f60, lit4] # menu/menusub
+        - [0x298F4C, .lit4, menu/menu_mdl]
+        - [0x298F60, lit4] # menu/menusub
 
         # .sdata
-        - [0x29a300, sdata]
-        - [0x29a308, .sdata, dbug/vramsave]
+        - [0x299300, sdata]
+        - [0x299308, .sdata, dbug/vramsave]
 
-        - [0x29a310, .sdata, os/mtc]
-        - [0x29a318, .sdata, os/syssub]
-        - [0x29a330, sdata, os/system]
-        - [0x29a350, .sdata, os/tim2]
+        - [0x299310, .sdata, os/mtc]
+        - [0x299318, .sdata, os/syssub]
+        - [0x299330, sdata, os/system]
+        - [0x299350, .sdata, os/tim2]
 
-        - [0x29a360, .sdata, main/cdctrl]
-        - [0x29a378, sdata, main/stdat]
-        - [0x29a438, sdata, main/scrctrl]
-        - [0x29a504, .sdata, main/sprite]
-        - [0x29a508, .sdata, main/subt]
-        - [0x29a518, sdata, main/drawctrl]
-        - [0x29a558, sdata, main/mbar]
-        - [0x29a588, sdata, main/etc]
-        - [0x29a598, sdata, main/wipe]
-        - [0x29a5d0, sdata, main/main]
-        - [0x29a6e0, .sdata, main/p3str]
+        - [0x299360, .sdata, main/cdctrl]
+        - [0x299378, sdata, main/stdat]
+        - [0x299438, sdata, main/scrctrl]
+        - [0x299504, .sdata, main/sprite]
+        - [0x299508, .sdata, main/subt]
+        - [0x299518, sdata, main/drawctrl]
+        - [0x299558, sdata, main/mbar]
+        - [0x299588, sdata, main/etc]
+        - [0x299598, sdata, main/wipe]
+        - [0x2995D0, sdata, main/main]
+        - [0x2996E0, .sdata, main/p3str]
 
-        - [0x29a6f0, sdata, menu/menudata]
-        - [0x29a700, sdata, menu/menusub]
-        - [0x29a830, sdata, menu/p3mc]
-        - [0x29a878, sdata, menu/memc]
-        - [0x29a890, sdata, menu/menufont]
-        - [0x29a8a0, sdata, menu/pksprite]
+        - [0x2996F0, sdata, menu/menudata]
+        - [0x299700, sdata, menu/menusub]
+        - [0x299830, sdata, menu/p3mc]
+        - [0x299878, sdata, menu/memc]
+        - [0x299890, sdata, menu/menufont]
+        - [0x2998A0, sdata, menu/pksprite]
 
-        - [0x29a8b8, .sdata, prlib/gifreg]
-        - [0x29a8bc, sdata, prlib/model]
-        - [0x29a8c4, sdata, prlib/database]
-        - [0x29a8c8, sdata, prlib/renderstuff]
-        - [0x29a8cc, .sdata, prlib/prlib]
-        - [0x29a8e0, sdata, prlib/render]
-        - [0x29a8ec, sdata, prlib/renderee]
-        - [0x29a8f0, sdata, prlib/transition]
-        - [0x29a8f4, .sdata, prlib/mfifo]
-        - [0x29a8fc, sdata, prlib/spadata]
-        - [0x29a918, sdata, prlib/scene]
-        - [0x29a920, sdata, prlib/cluster]
-        - [0x29a928, sdata, prlib/shape]
-        - [0x29a930, sdata, prlib/billboard]
-        - [0x29a938, sdata, prlib/depthfield]
-        - [0x29a93c, sdata, prlib/vram]
-        - [0x29a940, .sdata, prlib/random]
-        - [0x29a948, sdata, prlib/menderer]
-        - [0x29a9a0, sdata, prlib/menderercreate]
-        - [0x29a9ac, sdata, prlib/mendererawful]
-        - [0x29a9b0, sdata, prlib/mendereralpha]
-        - [0x29a9b4, .sdata, prlib/dmaqueue]
-        - [0x29a9b8, .sdata, prlib/tim2]
-        - [0x29a9c0, sdata, prlib/camera]
-        - [0x29a9c4, sdata, prlib/contour]
+        - [0x2998B8, .sdata, prlib/gifreg]
+        - [0x2998BC, sdata, prlib/model]
+        - [0x2998C4, sdata, prlib/database]
+        - [0x2998C8, sdata, prlib/renderstuff]
+        - [0x2998CC, .sdata, prlib/prlib]
+        - [0x2998E0, sdata, prlib/render]
+        - [0x2998EC, sdata, prlib/renderee]
+        - [0x2998F0, sdata, prlib/transition]
+        - [0x2998F4, .sdata, prlib/mfifo]
+        - [0x2998FC, sdata, prlib/spadata]
+        - [0x299918, sdata, prlib/scene]
+        - [0x299920, sdata, prlib/cluster]
+        - [0x299928, sdata, prlib/shape]
+        - [0x299930, sdata, prlib/billboard]
+        - [0x299938, sdata, prlib/depthfield]
+        - [0x29993C, sdata, prlib/vram]
+        - [0x299940, .sdata, prlib/random]
+        - [0x299948, sdata, prlib/menderer]
+        - [0x2999A0, sdata, prlib/menderercreate]
+        - [0x2999AC, sdata, prlib/mendererawful]
+        - [0x2999B0, sdata, prlib/mendereralpha]
+        - [0x2999B4, .sdata, prlib/dmaqueue]
+        - [0x2999B8, .sdata, prlib/tim2]
+        - [0x2999C0, sdata, prlib/camera]
+        - [0x2999C4, sdata, prlib/contour]
 
-        - [0x29a9d0, sdata, nalib/navector]
-        
+        - [0x2999D0, sdata, nalib/navector]
+
         # .sbss
         - { type: sbss,  vram: 0x00399a00, name: dbug/dbgmsg          }
- 
+
         - { type: .sbss, vram: 0x00399a18, name: os/mtc               }
         - { type: .sbss, vram: 0x00399a1c, name: os/cmngifpk          }
         - { type: .sbss, vram: 0x00399a2c, name: os/usrmem            }
@@ -461,9 +460,5 @@ segments:
 
         - { type: bss,   vram: 0x01c88500, name: sdk/scelib           }
         - { type: bss,   vram: 0x01c8df00, name: sdk/newlib           }
-        
-    - [0x29aa00, databin] # pad
-    - [0x29b000, databin] # .mfifo
-    - [0x2ab000, databin] # .reginfo
-    - [0x2ab018, databin] # .mdebug
-    - [0x8aaf0d]
+
+    - [0x299A00]

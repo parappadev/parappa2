@@ -27,16 +27,16 @@ TOOLS_DIR = ROOT / "tools"
 P3_YAML_FILE = "config/p3.jul12.yaml"
 P3_BASENAME = "SCPS_150.17"
 P3_LD_PATH = f"{P3_BASENAME}.ld"
-P3_ELF_PATH = f"build/{P3_BASENAME}"
+P3_ROM_PATH = f"build/{P3_BASENAME}.rom"
 P3_MAP_PATH = f"build/{P3_BASENAME}.map"
-P3_PRE_ELF_PATH = f"build/{P3_BASENAME}.elf"
+P3_ELF_PATH = f"build/{P3_BASENAME}.elf"
 
 WP2_YAML_FILE = "config/irx.wave2ps2.jul12.yaml"
 WP2_BASENAME = "WAVE2PS2.IRX"
 WP2_LD_PATH = f"{WP2_BASENAME}.ld"
-WP2_ELF_PATH = f"build/{WP2_BASENAME}"
+WP2_ROM_PATH = f"build/{WP2_BASENAME}.rom"
 WP2_MAP_PATH = f"build/{WP2_BASENAME}.map"
-WP2_PRE_ELF_PATH = f"build/{WP2_BASENAME}.elf"
+WP2_ELF_PATH = f"build/{WP2_BASENAME}.elf"
 
 EE_COMPILER_DIR = f"{TOOLS_DIR}/cc/ee-gcc29/bin"
 IOP_COMPILER_DIR = f"{TOOLS_DIR}/cc/iop-gcc281/bin"
@@ -54,6 +54,13 @@ EE_COMPILE_CMD = f"{EE_COMPILER_DIR}/ee-gcc -c {EE_COMMON_INCLUDES} {EE_COMPILER
 EE_COMPILE_CMD_CXX = f"{EE_COMPILER_DIR}/ee-gcc -c {EE_COMMON_INCLUDES} {EE_COMPILER_FLAGS_CXX}"
 
 IOP_COMPILE_CMD = f"{IOP_COMPILER_DIR}/iop-gcc -c {IOP_COMMON_INCLUDES} {IOP_COMPILER_FLAGS}"
+
+CROSS = "mips-linux-gnu-"
+
+TARGET_ELFS = [
+    Path(f"iso/{P3_BASENAME}"),
+    Path(f"iso/{WP2_BASENAME}"),
+]
 
 def exec_shell(command: List[str], stdout=subprocess.PIPE) -> str:
     ret = subprocess.run(command, stdout=stdout, stderr=subprocess.PIPE, text=True)
@@ -207,7 +214,6 @@ def build_stuff(linker_entries: List[LinkerEntry], is_irx: bool = False, append:
     ninja = ninja_syntax.Writer(open(str(ROOT / "build.ninja"), open_mode), width=9999)
 
     # Rules
-    cross = "mips-linux-gnu-"
     common_ld_args = "-EL -Map $mapfile -T $in -o $out"
     ee_ld_args = f"{common_ld_args} -T config/p3.jul12.misc.txt -T config/p3.jul12.vu_syms.txt -T config/p3.jul12.undefined_syms_auto.txt -T config/p3.jul12.undefined_funcs_auto.txt -T config/p3.jul12.undefined_syms.txt"
     wp2_ld_args = f"{common_ld_args} -T config/irx.wave2ps2.jul12.undefined_syms_auto.txt -T config/irx.wave2ps2.jul12.undefined_funcs_auto.txt -T config/irx.wave2ps2.jul12.undefined_syms.txt"
@@ -222,7 +228,7 @@ def build_stuff(linker_entries: List[LinkerEntry], is_irx: bool = False, append:
         ninja.rule(
             "ee_as",
             description="ee_as $in",
-            command=f"cpp {EE_COMMON_INCLUDES} $in -o - | iconv -f=UTF-8 -t=EUC-JP $in | {cross}as -no-pad-sections -EL -march=5900 -mabi=eabi -Iinclude -o $out && python3 tools/buildtools/elf_patcher.py $out gas",
+            command=f"cpp {EE_COMMON_INCLUDES} $in -o - | iconv -f=UTF-8 -t=EUC-JP $in | {CROSS}as -no-pad-sections -EL -march=5900 -mabi=eabi -Iinclude -o $out && python3 tools/buildtools/elf_patcher.py $out gas",
         )
 
         #
@@ -233,13 +239,13 @@ def build_stuff(linker_entries: List[LinkerEntry], is_irx: bool = False, append:
         ninja.rule(
             "iop_as",
             description="iop_as $in",
-            command=f"cpp {IOP_COMMON_INCLUDES} $in -o - | {cross}as -no-pad-sections -EL -march=3000 -Iinclude -o $out",
+            command=f"cpp {IOP_COMMON_INCLUDES} $in -o - | {CROSS}as -no-pad-sections -EL -march=3000 -Iinclude -o $out",
         )
 
         ninja.rule(
             "ee_cpp",
             description="ee_cpp $in",
-            command=f"{EE_COMPILE_CMD_CXX} $in -o $out && {cross}strip $out -N dummy-symbol-name",
+            command=f"{EE_COMPILE_CMD_CXX} $in -o $out && {CROSS}strip $out -N dummy-symbol-name",
         )
 
         ninja.rule(
@@ -251,25 +257,25 @@ def build_stuff(linker_entries: List[LinkerEntry], is_irx: bool = False, append:
         ninja.rule(
             "ee_cc",
             description="ee_cc $in",
-            command=f"{EE_COMPILE_CMD} $in -o $out && {cross}strip $out -N dummy-symbol-name",
+            command=f"{EE_COMPILE_CMD} $in -o $out && {CROSS}strip $out -N dummy-symbol-name",
         )
 
         ninja.rule(
             "iop_cc",
             description="iop_cc $in",
-            command=f"{IOP_COMPILE_CMD} $in -o $out && {cross}strip $out -N dummy-symbol-name",
+            command=f"{IOP_COMPILE_CMD} $in -o $out && {CROSS}strip $out -N dummy-symbol-name",
         )
 
         ninja.rule(
             "ee_ld",
             description="link $out",
-            command=f"{cross}ld {ee_ld_args}",
+            command=f"{CROSS}ld {ee_ld_args}",
         )
 
         ninja.rule(
             "iop_ld",
             description="link $out",
-            command=f"{cross}ld {wp2_ld_args}",
+            command=f"{CROSS}ld {wp2_ld_args}",
         )
 
         ninja.rule(
@@ -279,9 +285,9 @@ def build_stuff(linker_entries: List[LinkerEntry], is_irx: bool = False, append:
         )
 
         ninja.rule(
-            "elf",
-            description="elf $out",
-            command=f"{cross}objcopy $in $out -O binary",
+            "rom",
+            description="rom $out",
+            command=f"{CROSS}objcopy $in $out -O binary",
         )
 
     task_as  = "ee_as" if not is_irx else "iop_as"
@@ -330,35 +336,35 @@ def build_stuff(linker_entries: List[LinkerEntry], is_irx: bool = False, append:
             print(f"ERROR: Unsupported build segment type {seg.type}")
             sys.exit(1)
 
-    pre_elf_path = P3_PRE_ELF_PATH if not is_irx else WP2_PRE_ELF_PATH
+    elf_path = P3_ELF_PATH if not is_irx else WP2_ELF_PATH
     ld_path = P3_LD_PATH if not is_irx else WP2_LD_PATH
     map_path = P3_MAP_PATH if not is_irx else WP2_MAP_PATH
 
     ld_rule = "ee_ld" if not is_irx else "iop_ld"
 
     ninja.build(
-        pre_elf_path,
+        elf_path,
         ld_rule,
         ld_path,
         implicit=[str(obj) for obj in built_objects],
         variables={"mapfile": map_path},
     )
 
-    elf_path = P3_ELF_PATH if not is_irx else WP2_ELF_PATH
+    rom_path = P3_ROM_PATH if not is_irx else WP2_ROM_PATH
 
     ninja.build(
+        rom_path,
+        "rom",
         elf_path,
-        "elf",
-        pre_elf_path,
     )
 
     checksum_path = "config/p3.jul12.checksum.sha1" if not is_irx else "config/irx.wave2ps2.jul12.checksum.sha1"
 
     ninja.build(
-        elf_path + ".ok",
+        rom_path + ".ok",
         "sha1sum",
         checksum_path,
-        implicit=[elf_path],
+        implicit=[rom_path],
     )
 
 def generate_objdiff_configuration(config: dict[str, Any]):
@@ -498,15 +504,13 @@ def build_objdiff_objects():
         build_jobs.append((asm_path, target_path))
 
     # compile objects
-    cross = "mips-linux-gnu-"
-
     dummy_c_path = Path("obj", "dummy.c")
     dummy_o_path = Path("obj", "dummy.c.o")
 
     # create the empty source (touch)
     dummy_c_path.parent.mkdir(parents=True, exist_ok=True)
     dummy_c_path.open(mode="a").close()
-    command = f"{EE_COMPILE_CMD} {dummy_c_path} -o {dummy_o_path} && {cross}strip {dummy_o_path} -N dummy-symbol-name"
+    command = f"{EE_COMPILE_CMD} {dummy_c_path} -o {dummy_o_path} && {CROSS}strip {dummy_o_path} -N dummy-symbol-name"
     subprocess.run(command, shell=True)
     dummy_c_path.unlink()
 
@@ -514,7 +518,7 @@ def build_objdiff_objects():
         command = (
             f"cpp {EE_COMMON_INCLUDES} {asm_path} -o - | "
             f"iconv -f=UTF-8 -t=EUC-JP {asm_path} | "
-            f"{cross}as -no-pad-sections -EL -march=5900 -mabi=eabi -Iinclude -o {target_path} && "
+            f"{CROSS}as -no-pad-sections -EL -march=5900 -mabi=eabi -Iinclude -o {target_path} && "
             f"python3 tools/buildtools/elf_patcher.py {target_path} gas"
         )
 
@@ -593,6 +597,12 @@ def fix_compile_commands():
     with open("compile_commands.json", "w") as f:
         json.dump(data, f, indent=2)
 
+def prepare_rom_from_elfs(elfs: list[Path]):
+    for elf in elfs:
+        assert elf.exists(), f"{elf} must exist!"
+        command = f"{CROSS}objcopy -O binary --gap-fill=0x00 {elf} {elf}.rom"
+        subprocess.run(command, shell=True, check=True)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Configure the project")
     parser.add_argument(
@@ -636,6 +646,8 @@ if __name__ == "__main__":
 
     if args.cleansrc:
         shutil.rmtree("src", ignore_errors=True)
+
+    prepare_rom_from_elfs(TARGET_ELFS)
 
     split.main([Path(P3_YAML_FILE)], modes=["all"], verbose=False)
     linker_entries = split.linker_writer.entries

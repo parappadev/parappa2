@@ -1,9 +1,9 @@
 name: Wave2PS2/WP2 (July 12th prototype)
-sha1: 5f46bae0cdbab8cbc281dd4f8788fd222c0fbf5d
+sha1: 5161d263253776c7d7d13a1b8dd8e1a03b2d1aac
 options:
     # paths
     basename: WAVE2PS2.IRX
-    target_path: iso/WAVE2PS2.IRX
+    target_path: iso/WAVE2PS2.IRX.rom
     base_path: ..
 
     asm_path: asm/iop_mdl/wp2cd
@@ -33,44 +33,33 @@ options:
 
     section_order: [".text", ".rodata", ".data", ".sbss", ".bss"]
 segments:
-    - [0, databin, elf_header]
-    - [0x34, databin] # ELF program headers
-    - [0x74, databin] # .iopmod
-
     - name: main
       type: code
-      start: 0xa0
+      start: 0x0
       vram: 0x0 # Yes, it really starts at 0x0. Why?
       bss_size: 0x801c8
       subsegments:
         # .text
-        - [0xa0, c, iop/bgm_entr]
-        - [0x190, c, iop/bgm_com]
-        - [0x710, c, iop/bgm_play]
+        - [0x0, c, iop/bgm_entr]
+        - [0xF0, c, iop/bgm_com]
+        - [0x670, c, iop/bgm_play]
 
-        - [0x37c0, asm, sdk/ilb_stub]
+        - [0x3720, asm, sdk/ilb_stub]
 
         # .rodata
-        - [0x3a70, .rodata, iop/bgm_entr]
-        - [0x3ac0, .rodata, iop/bgm_com]
-        - [0x3af0, .rodata, iop/bgm_play]
+        - [0x39D0, .rodata, iop/bgm_entr]
+        - [0x3A20, .rodata, iop/bgm_com]
+        - [0x3A50, .rodata, iop/bgm_play]
 
         # .data
-        - [0x3b30, .data, iop/bgm_entr]
-        - [0x3b40, .data, iop/bgm_com]
-        - [0x3b50, .data, iop/bgm_play]
+        - [0x3A90, .data, iop/bgm_entr]
+        - [0x3AA0, .data, iop/bgm_com]
+        - [0x3AB0, .data, iop/bgm_play]
 
-        - { start: 0x3ba0, type: bss,   vram: 0x00003b00, name: iop/bgm_play }
+        - { type: bss,   vram: 0x00003b00, name: iop/bgm_play }
 
-        - { start: 0x3ba0, type: bss,   vram: 0x00003b20, name: iop/bgm_play }
-        - { start: 0x3ba0, type: .bss,  vram: 0x00003c30, name: iop/bgm_com  }
-        - { start: 0x3ba0, type: bss,   vram: 0x00003c70, name: iop/bgm_play }
+        - { type: bss,   vram: 0x00003b20, name: iop/bgm_play }
+        - { type: .bss,  vram: 0x00003c30, name: iop/bgm_com  }
+        - { type: bss,   vram: 0x00003c70, name: iop/bgm_play }
 
-    - [0x3ba0, databin] # .mdebug
-    - [0x101bc, databin] # .shstrtab
-    - [0x1021c, databin] # ELF section headers
-    - [0x10424, databin] # .rel.text
-    - [0x12894, databin] # .rel.data
-    - [0x1289c, databin] # .symtab
-    - [0x1325c, databin] # .strtab
-    - [0x13878]
+    - [0x3B00]

@@ -1,12 +1,12 @@
 // tmp/cca21454_ilb_stub.s
-rom:0x37c4 symbol:none reloc:MIPS_NONE // libsd_stub
-rom:0x3810 symbol:none reloc:MIPS_NONE // cdvdman_stub
-rom:0x3884 symbol:none reloc:MIPS_NONE // sysmem_stub
-rom:0x38b0 symbol:none reloc:MIPS_NONE // intrman_stub
-rom:0x38ec symbol:none reloc:MIPS_NONE // ioman_stub
-rom:0x3928 symbol:none reloc:MIPS_NONE // sifcmd_stub
-rom:0x3964 symbol:none reloc:MIPS_NONE // sifman_stub
-rom:0x39a0 symbol:none reloc:MIPS_NONE // stdio_stub
-rom:0x39c4 symbol:none reloc:MIPS_NONE // sysclib_stub
-rom:0x39e8 symbol:none reloc:MIPS_NONE // thbase_stub
-rom:0x3a2c symbol:none reloc:MIPS_NONE // thsemap_stub
+rom:0x3724 symbol:none reloc:MIPS_NONE // libsd_stub
+rom:0x3770 symbol:none reloc:MIPS_NONE // cdvdman_stub
+rom:0x37E4 symbol:none reloc:MIPS_NONE // sysmem_stub
+rom:0x3810 symbol:none reloc:MIPS_NONE // intrman_stub
+rom:0x384C symbol:none reloc:MIPS_NONE // ioman_stub
+rom:0x3888 symbol:none reloc:MIPS_NONE // sifcmd_stub
+rom:0x38C4 symbol:none reloc:MIPS_NONE // sifman_stub
+rom:0x3900 symbol:none reloc:MIPS_NONE // stdio_stub
+rom:0x3924 symbol:none reloc:MIPS_NONE // sysclib_stub
+rom:0x3948 symbol:none reloc:MIPS_NONE // thbase_stub
+rom:0x398C symbol:none reloc:MIPS_NONE // thsemap_stub
