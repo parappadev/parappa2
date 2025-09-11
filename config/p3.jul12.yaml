@@ -374,93 +374,93 @@ segments:
         - [0x29a9d0, sdata, nalib/navector]
         
         # .sbss
-        - { start: 0x29aa00, type: sbss,  vram: 0x00399a00, name: dbug/dbgmsg          }
+        - { type: sbss,  vram: 0x00399a00, name: dbug/dbgmsg          }
  
-        - { start: 0x29aa00, type: .sbss, vram: 0x00399a18, name: os/mtc               }
-        - { start: 0x29aa00, type: .sbss, vram: 0x00399a1c, name: os/cmngifpk          }
-        - { start: 0x29aa00, type: .sbss, vram: 0x00399a2c, name: os/usrmem            }
+        - { type: .sbss, vram: 0x00399a18, name: os/mtc               }
+        - { type: .sbss, vram: 0x00399a1c, name: os/cmngifpk          }
+        - { type: .sbss, vram: 0x00399a2c, name: os/usrmem            }
 
-        - { start: 0x29aa00, type: .sbss, vram: 0x00399a34, name: main/cdctrl          }
-        - { start: 0x29aa00, type: sbss,  vram: 0x00399a38, name: main/scrctrl         }
-        - { start: 0x29aa00, type: .sbss, vram: 0x00399a44, name: main/sprite          }
-        - { start: 0x29aa00, type: .sbss, vram: 0x00399a48, name: main/subt            }
-        - { start: 0x29aa00, type: sbss,  vram: 0x00399a4c, name: main/drawctrl        }
-        - { start: 0x29aa00, type: sbss,  vram: 0x00399a80, name: main/mbar            }
-        - { start: 0x29aa00, type: sbss,  vram: 0x00399a98, name: main/wipe            }
-        - { start: 0x29aa00, type: .sbss, vram: 0x00399aa0, name: main/mcctrl          }
-        - { start: 0x29aa00, type: .sbss, vram: 0x00399aac, name: main/p3str           }
+        - { type: .sbss, vram: 0x00399a34, name: main/cdctrl          }
+        - { type: sbss,  vram: 0x00399a38, name: main/scrctrl         }
+        - { type: .sbss, vram: 0x00399a44, name: main/sprite          }
+        - { type: .sbss, vram: 0x00399a48, name: main/subt            }
+        - { type: sbss,  vram: 0x00399a4c, name: main/drawctrl        }
+        - { type: sbss,  vram: 0x00399a80, name: main/mbar            }
+        - { type: sbss,  vram: 0x00399a98, name: main/wipe            }
+        - { type: .sbss, vram: 0x00399aa0, name: main/mcctrl          }
+        - { type: .sbss, vram: 0x00399aac, name: main/p3str           }
 
-        - { start: 0x29aa00, type: .sbss, vram: 0x00399abc, name: menu/menu            }
-        - { start: 0x29aa00, type: .sbss, vram: 0x00399ac4, name: menu/menu_mdl        }
-        - { start: 0x29aa00, type: sbss,  vram: 0x00399ac8, name: menu/menusub         }
-        - { start: 0x29aa00, type: sbss,  vram: 0x00399b60, name: menu/p3mc            }
-        - { start: 0x29aa00, type: sbss,  vram: 0x00399b7c, name: menu/menufont        }
+        - { type: .sbss, vram: 0x00399abc, name: menu/menu            }
+        - { type: .sbss, vram: 0x00399ac4, name: menu/menu_mdl        }
+        - { type: sbss,  vram: 0x00399ac8, name: menu/menusub         }
+        - { type: sbss,  vram: 0x00399b60, name: menu/p3mc            }
+        - { type: sbss,  vram: 0x00399b7c, name: menu/menufont        }
 
-        - { start: 0x29aa00, type: sbss,  vram: 0x00399b8c, name: prlib/model          }
-        - { start: 0x29aa00, type: sbss,  vram: 0x00399b90, name: prlib/prlib          }
-        - { start: 0x29aa00, type: sbss,  vram: 0x00399b94, name: prlib/render         }
-        - { start: 0x29aa00, type: sbss,  vram: 0x00399b98, name: prlib/microprogram   }
-        - { start: 0x29aa00, type: sbss,  vram: 0x00399ba0, name: prlib/spadata        }
-        - { start: 0x29aa00, type: sbss,  vram: 0x00399ba8, name: prlib/menderer       }
-        - { start: 0x29aa00, type: sbss,  vram: 0x00399bb4, name: prlib/mendererawful  }
-        - { start: 0x29aa00, type: sbss,  vram: 0x00399bc8, name: prlib/wave           }
+        - { type: sbss,  vram: 0x00399b8c, name: prlib/model          }
+        - { type: sbss,  vram: 0x00399b90, name: prlib/prlib          }
+        - { type: sbss,  vram: 0x00399b94, name: prlib/render         }
+        - { type: sbss,  vram: 0x00399b98, name: prlib/microprogram   }
+        - { type: sbss,  vram: 0x00399ba0, name: prlib/spadata        }
+        - { type: sbss,  vram: 0x00399ba8, name: prlib/menderer       }
+        - { type: sbss,  vram: 0x00399bb4, name: prlib/mendererawful  }
+        - { type: sbss,  vram: 0x00399bc8, name: prlib/wave           }
 
-        - { start: 0x29aa00, type: sbss,  vram: 0x00399bd0, name: sdk/newlib           }
+        - { type: sbss,  vram: 0x00399bd0, name: sdk/newlib           }
 
         # .bss
-        - { start: 0x29aa1c, type: bss,   vram: 0x00399c00, name: bss                  }
+        - { type: bss,   vram: 0x00399c00, name: bss                  }
 
-        - { start: 0x29aa1c, type: .bss,  vram: 0x00399d60, name: dbug/dbgmsg          }
+        - { type: .bss,  vram: 0x00399d60, name: dbug/dbgmsg          }
 
-        - { start: 0x29aa1c, type: .bss,  vram: 0x003a9d90, name: os/mtc               }
-        - { start: 0x29aa1c, type: .bss,  vram: 0x003ba0c0, name: os/syssub            }
-        - { start: 0x29aa1c, type: bss,   vram: 0x003babd0, name: os/system            }
-        - { start: 0x29aa1c, type: bss,   vram: 0x003dad50, name: os/cmngifpk          }
-        - { start: 0x29aa1c, type: bss,   vram: 0x003db380, name: os/usrmem            }
-        - { start: 0x29aa1c, type: .bss,  vram: 0x01c5d380, name: os/tim2              }
+        - { type: .bss,  vram: 0x003a9d90, name: os/mtc               }
+        - { type: .bss,  vram: 0x003ba0c0, name: os/syssub            }
+        - { type: bss,   vram: 0x003babd0, name: os/system            }
+        - { type: bss,   vram: 0x003dad50, name: os/cmngifpk          }
+        - { type: bss,   vram: 0x003db380, name: os/usrmem            }
+        - { type: .bss,  vram: 0x01c5d380, name: os/tim2              }
 
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c5e000, name: main/cdctrl          }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c5f030, name: main/scrctrl         }
-        - { start: 0x29aa1c, type: .bss,  vram: 0x01c65b80, name: main/sprite          }
-        - { start: 0x29aa1c, type: .bss,  vram: 0x01c6db90, name: main/fadectrl        }
-        - { start: 0x29aa1c, type: .bss,  vram: 0x01c6dba0, name: main/subt            }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c6e030, name: main/drawctrl        }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c6fef0, name: main/effect          }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c6ffc0, name: main/mbar            }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c72000, name: main/pack            }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c73018, name: main/etc             }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c730e8, name: main/mcctrl          }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c77630, name: main/main            }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c77640, name: main/p3str           }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c77700, name: main/commake         }
+        - { type: bss,   vram: 0x01c5e000, name: main/cdctrl          }
+        - { type: bss,   vram: 0x01c5f030, name: main/scrctrl         }
+        - { type: .bss,  vram: 0x01c65b80, name: main/sprite          }
+        - { type: .bss,  vram: 0x01c6db90, name: main/fadectrl        }
+        - { type: .bss,  vram: 0x01c6dba0, name: main/subt            }
+        - { type: bss,   vram: 0x01c6e030, name: main/drawctrl        }
+        - { type: bss,   vram: 0x01c6fef0, name: main/effect          }
+        - { type: bss,   vram: 0x01c6ffc0, name: main/mbar            }
+        - { type: bss,   vram: 0x01c72000, name: main/pack            }
+        - { type: bss,   vram: 0x01c73018, name: main/etc             }
+        - { type: bss,   vram: 0x01c730e8, name: main/mcctrl          }
+        - { type: bss,   vram: 0x01c77630, name: main/main            }
+        - { type: bss,   vram: 0x01c77640, name: main/p3str           }
+        - { type: bss,   vram: 0x01c77700, name: main/commake         }
 
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c778c8, name: menu/menu            }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c77a50, name: menu/menusub         }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c81100, name: menu/p3mc            }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c81540, name: menu/memc            }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c81880, name: menu/menufont        }
+        - { type: bss,   vram: 0x01c778c8, name: menu/menu            }
+        - { type: bss,   vram: 0x01c77a50, name: menu/menusub         }
+        - { type: bss,   vram: 0x01c81100, name: menu/p3mc            }
+        - { type: bss,   vram: 0x01c81540, name: menu/memc            }
+        - { type: bss,   vram: 0x01c81880, name: menu/menufont        }
 
-        - { start: 0x29aa1c, type: .bss,  vram: 0x01c828c0, name: iop_mdl/wp2cd_rpc    }
-        - { start: 0x29aa1c, type: .bss,  vram: 0x01c82a00, name: iop_mdl/tapctrl_rpc  }
+        - { type: .bss,  vram: 0x01c828c0, name: iop_mdl/wp2cd_rpc    }
+        - { type: .bss,  vram: 0x01c82a00, name: iop_mdl/tapctrl_rpc  }
 
-        - { start: 0x29aa1c, type: .bss,  vram: 0x01c82a70, name: prlib/gifreg         }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c83190, name: prlib/prlib          }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c831b0, name: prlib/renderee       }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c831c0, name: prlib/microprogram   }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c831e0, name: prlib/spram          }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c83260, name: prlib/spadata        }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c83390, name: prlib/billboard      }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c833d0, name: prlib/depthfield     }
-        - { start: 0x29aa1c, type: .bss,  vram: 0x01c833e0, name: prlib/random         }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c83570, name: prlib/menderercreate }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c83ba0, name: prlib/mendererawful  }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c83bd0, name: prlib/mendereralpha  }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c83c10, name: prlib/mendererdata   }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c84c40, name: prlib/wave           }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c884c0, name: prlib/camera         }
+        - { type: .bss,  vram: 0x01c82a70, name: prlib/gifreg         }
+        - { type: bss,   vram: 0x01c83190, name: prlib/prlib          }
+        - { type: bss,   vram: 0x01c831b0, name: prlib/renderee       }
+        - { type: bss,   vram: 0x01c831c0, name: prlib/microprogram   }
+        - { type: bss,   vram: 0x01c831e0, name: prlib/spram          }
+        - { type: bss,   vram: 0x01c83260, name: prlib/spadata        }
+        - { type: bss,   vram: 0x01c83390, name: prlib/billboard      }
+        - { type: bss,   vram: 0x01c833d0, name: prlib/depthfield     }
+        - { type: .bss,  vram: 0x01c833e0, name: prlib/random         }
+        - { type: bss,   vram: 0x01c83570, name: prlib/menderercreate }
+        - { type: bss,   vram: 0x01c83ba0, name: prlib/mendererawful  }
+        - { type: bss,   vram: 0x01c83bd0, name: prlib/mendereralpha  }
+        - { type: bss,   vram: 0x01c83c10, name: prlib/mendererdata   }
+        - { type: bss,   vram: 0x01c84c40, name: prlib/wave           }
+        - { type: bss,   vram: 0x01c884c0, name: prlib/camera         }
 
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c88500, name: sdk/scelib           }
-        - { start: 0x29aa1c, type: bss,   vram: 0x01c8df00, name: sdk/newlib           }
+        - { type: bss,   vram: 0x01c88500, name: sdk/scelib           }
+        - { type: bss,   vram: 0x01c8df00, name: sdk/newlib           }
         
     - [0x29aa00, databin] # pad
     - [0x29b000, databin] # .mfifo

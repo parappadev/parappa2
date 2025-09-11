@@ -27,3 +27,5 @@ output/
 .vscode/launch.json
 .vscode/settings.json
 objdiff.json
+
+.venv/
