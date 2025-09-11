@@ -1,3 +1,5 @@
 _gp = main_RODATA_END + 0x7ff0;
 _end = 0x01dde800; /* todo */
 end = _end;
+
+ENTRY(_start);
