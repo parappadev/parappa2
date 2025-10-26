@@ -1,0 +1,97 @@
+#
+# See elf32elmip.xr for the original
+# IOP linker script reference.
+#
+
+settings:
+  base_path: build
+  noload_sections: []
+
+  sections_allowlist: [.reginfo]
+
+  sections_allowlist_extra:
+    - .mdebug
+    - .shstrtab
+    - .symtab
+    - .strtab
+
+  sections_denylist: []
+  
+  # Not in base slinky.
+  # Added in modified build.
+  emit_noload_segment: False
+
+segments:
+  # TODO: .reginfo should go here?
+
+  - name: text
+    #
+    # Zeroed VRAM as per the original linker script
+    # (though it seems to not be necessary?
+    #  Will leave regardless for accuracy).
+    #
+    fixed_vram: 0x0
+    alloc_sections: [.text]
+    files:
+      - { path: src/iop_mdl/wp2cd/iop/bgm_entr.c.o }
+      - { path: src/iop_mdl/wp2cd/iop/bgm_com.c.o }
+      - { path: src/iop_mdl/wp2cd/iop/bgm_play.c.o }
+      - { path: asm/iop_mdl/wp2cd/sdk/ilb_stub.s.o }
+  
+  # - name: rel.text
+  #   fixed_vram: 0x0
+  #   alloc_sections: [.rel.text]
+  #   files:
+  #     - { path: src/iop_mdl/wp2cd/iop/bgm_entr.c.o }
+  #     - { path: src/iop_mdl/wp2cd/iop/bgm_com.c.o }
+  #     - { path: src/iop_mdl/wp2cd/iop/bgm_play.c.o }
+  #     - { path: asm/iop_mdl/wp2cd/sdk/ilb_stub.s.o }
+
+  - name: rodata
+    fixed_vram: 0x0
+    alloc_sections: [.rodata]
+    files:
+      - { path: src/iop_mdl/wp2cd/iop/bgm_entr.c.o }
+      - { path: src/iop_mdl/wp2cd/iop/bgm_com.c.o }
+      - { path: src/iop_mdl/wp2cd/iop/bgm_play.c.o }
+      - { path: asm/iop_mdl/wp2cd/sdk/ilb_stub.s.o }
+
+  - name: data
+    fixed_vram: 0x0
+    alloc_sections: [.data]
+    files:
+      - { path: src/iop_mdl/wp2cd/iop/bgm_entr.c.o }
+      - { path: src/iop_mdl/wp2cd/iop/bgm_com.c.o }
+      - { path: src/iop_mdl/wp2cd/iop/bgm_play.c.o }
+      - { path: asm/iop_mdl/wp2cd/sdk/ilb_stub.s.o }
+  
+  # - name: rel.data
+  #   fixed_vram: 0x0
+  #   alloc_sections: [.rel.data]
+  #   files:
+  #     - { path: src/iop_mdl/wp2cd/iop/bgm_entr.c.o }
+  #     - { path: src/iop_mdl/wp2cd/iop/bgm_com.c.o }
+  #     - { path: src/iop_mdl/wp2cd/iop/bgm_play.c.o }
+  #     - { path: asm/iop_mdl/wp2cd/sdk/ilb_stub.s.o }
+
+  - name: sbss
+    fixed_vram: 0x0
+    alloc_sections: [.sbss, .scommon]
+    noload_sections: [.sbss, .scommon]
+    files:
+      - { path: src/iop_mdl/wp2cd/iop/bgm_play.c.o }
+
+  - name: bss
+    fixed_vram: 0x0
+    alloc_sections: [.bss, COMMON]
+    noload_sections: [.bss, COMMON]
+    files:
+      - { path: src/iop_mdl/wp2cd/iop/bgm_entr.c.o }
+      - { path: src/iop_mdl/wp2cd/iop/bgm_com.c.o }
+      - { path: src/iop_mdl/wp2cd/iop/bgm_play.c.o }
+
+#
+# The original linker script
+# specifies '_start'.
+#
+entry: start

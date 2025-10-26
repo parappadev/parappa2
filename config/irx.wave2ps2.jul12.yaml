@@ -44,7 +44,7 @@ segments:
         - [0xF0, c, iop/bgm_com]
         - [0x670, c, iop/bgm_play]
 
-        - [0x3720, asm, sdk/ilb_stub]
+        - [0x3720, hasm, sdk/ilb_stub]
 
         # .rodata
         - [0x39D0, .rodata, iop/bgm_entr]
@@ -56,10 +56,10 @@ segments:
         - [0x3AA0, .data, iop/bgm_com]
         - [0x3AB0, .data, iop/bgm_play]
 
-        - { type: bss,   vram: 0x00003b00, name: iop/bgm_play }
+        - { type: .sbss,  vram: 0x00003b00, name: iop/bgm_play }
 
-        - { type: bss,   vram: 0x00003b20, name: iop/bgm_play }
-        - { type: .bss,  vram: 0x00003c30, name: iop/bgm_com  }
-        - { type: bss,   vram: 0x00003c70, name: iop/bgm_play }
+        - { type: .bss,   vram: 0x00003b20, name: iop/bgm_play }
+        # - { type: .bss,  vram: 0x00003c30, name: iop/bgm_com  }
+        # - { type: bss,   vram: 0x00003c70, name: iop/bgm_play }
 
     - [0x3B00]

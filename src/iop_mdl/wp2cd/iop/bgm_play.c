@@ -66,17 +66,19 @@ int BgmVolumeSet = 0;
 int BgmPause = 0;
 int BgmMode = 0;
 
-/* bss 14 */  extern int oldstat;
-/* bss 1b0 */ extern unsigned char ring_buf[524288];
-/* bss 0 */   extern /* static */ int bgmPlayReadMode;
-/* bss 150 */ extern WAVEP2 wavep2;
-/* bss 10 */  extern int ReadBuffSize;
-/* bss 0 */   extern int ReadPkSize;
-/* bss 8 */   extern int BgmVolume;
-/* bss 180 */ extern sceCdlFILE fpCd;
-/* bss 4 */   extern sceCdRMode modeCd;
-/* bss c */   extern int CdErrCode;
-/* bss 8 */   extern /* static */ sceSifDmaData sifdmadata[16];
+int ReadPkSize;
+sceCdRMode modeCd;
+int BgmVolume;
+int CdErrCode;
+int ReadBuffSize;
+int oldstat;
+
+static int bgmPlayReadMode;
+static sceSifDmaData sifdmadata[16];
+static int gRpcArg[16];
+static WAVEP2 wavep2;
+static sceCdlFILE fpCd;
+static unsigned char ring_buf[524288] PR_ALIGNED(16);
 
 int Wp2CdStRead(u_int sectors, u_int *buf, u_int mode, u_int *err) {
     int ret;

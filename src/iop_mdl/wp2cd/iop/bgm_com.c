@@ -35,7 +35,7 @@ extern int          BgmGetCdErrCode(void);
 
 static void* bgmFunc(unsigned int command, void *data, int size);
 
-int gRpcArg[16];
+extern int gRpcArg[16];
 
 int sce_bgm_loop(void) {
     sceSifQueueData qd;

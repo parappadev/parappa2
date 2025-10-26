@@ -25,6 +25,7 @@ ROOT = Path(__file__).parent
 TOOLS_DIR = ROOT / "tools"
 
 P3_YAML_FILE = "config/p3.jul12.yaml"
+P3_SLINK_FILE = f"config/p3.jul12.slinky.yaml"
 P3_BASENAME = "SCPS_150.17"
 P3_LD_PATH = f"{P3_BASENAME}.ld"
 P3_ROM_PATH = f"build/{P3_BASENAME}.rom"
@@ -32,6 +33,7 @@ P3_MAP_PATH = f"build/{P3_BASENAME}.map"
 P3_ELF_PATH = f"build/{P3_BASENAME}.elf"
 
 WP2_YAML_FILE = "config/irx.wave2ps2.jul12.yaml"
+WP2_SLINK_FILE = f"config/irx.wave2ps2.jul12.slinky.yaml"
 WP2_BASENAME = "WAVE2PS2.IRX"
 WP2_LD_PATH = f"{WP2_BASENAME}.ld"
 WP2_ROM_PATH = f"build/{WP2_BASENAME}.rom"
@@ -211,14 +213,14 @@ def build_stuff(linker_entries: List[LinkerEntry], is_irx: bool = False, append:
                 implicit_outputs=implicit_outputs,
             )
 
-    open_mode = "a" if append else "w"    
+    open_mode = "a" if append else "w"
     ninja = ninja_syntax.Writer(open(str(ROOT / "build.ninja"), open_mode), width=9999)
 
     # Rules
     slinky_args = "--omit-version-comment"
     common_ld_args = "-EL -Map $mapfile -T $in -o $out"
     ee_ld_args = f"{common_ld_args} -T config/p3.jul12.misc.txt -T config/p3.jul12.vu_syms.txt -T config/p3.jul12.undefined_syms.txt"
-    wp2_ld_args = f"{common_ld_args} -T config/irx.wave2ps2.jul12.undefined_syms_auto.txt -T config/irx.wave2ps2.jul12.undefined_funcs_auto.txt -T config/irx.wave2ps2.jul12.undefined_syms.txt"
+    wp2_ld_args = f"{common_ld_args} -dc -r -T config/irx.wave2ps2.jul12.undefined_syms_auto.txt -T config/irx.wave2ps2.jul12.undefined_funcs_auto.txt -T config/irx.wave2ps2.jul12.undefined_syms.txt"
 
     if not append:
         ninja.rule(
@@ -347,14 +349,15 @@ def build_stuff(linker_entries: List[LinkerEntry], is_irx: bool = False, append:
     elf_path = P3_ELF_PATH if not is_irx else WP2_ELF_PATH
     ld_path = P3_LD_PATH if not is_irx else WP2_LD_PATH
     map_path = P3_MAP_PATH if not is_irx else WP2_MAP_PATH
+    slink_path = P3_SLINK_FILE if not is_irx else WP2_SLINK_FILE
 
     ld_rule = "ee_ld" if not is_irx else "iop_ld"
 
-    if not is_irx:
+    if True: # not is_irx
         ninja.build(
             ld_path,
             "slink",
-            "config/p3.jul12.slinky.yaml",
+            slink_path,
         )
 
     ninja.build(
