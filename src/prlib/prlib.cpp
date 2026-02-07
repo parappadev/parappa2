@@ -70,10 +70,10 @@ PrSceneObject* PrInitializeSceneDBuff(sceGsDBuffDc *dbuff, const char *name, u_i
 PR_EXTERN
 void PrCleanupScene(PrSceneObject *scene) {
     if (scene == NULL) {
-        scene = prObjectDatabase.unk0;
+        scene = prObjectDatabase.m_scene_set.m_head;
         while (scene != NULL) {
             prObjectDatabase.DeleteScene(scene);
-            scene = prObjectDatabase.unk0;
+            scene = prObjectDatabase.m_scene_set.m_head;
         }
     } else {
         prObjectDatabase.DeleteScene(scene);

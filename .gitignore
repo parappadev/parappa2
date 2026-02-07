@@ -21,3 +21,4 @@ dump/
 iso/
 obj/
 tools/ccc/
+.venv/

@@ -38,6 +38,7 @@ PR_CAMERAHANDLE PrInitializeCamera(PR_CAMERAHANDLE cameraImage);
 void PrCleanupModel(PR_MODELHANDLE model);
 void PrCleanupAnimation(PR_ANIMATIONHANDLE animation);
 void PrCleanupCamera(PR_CAMERAHANDLE camera);
+PR_EXTERN
 void PrCleanupAllSceneModel(PR_SCENEHANDLE scene);
 
 float PrGetAnimationStartFrame(PR_ANIMATIONHANDLE animation);

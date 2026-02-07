@@ -38,7 +38,11 @@ typedef float f32;
 #define GS_X_COORD(x) ((2048 - (640 / 2) + x) << 4)
 #define GS_Y_COORD(y) ((2048 - (224 / 2) + y) << 4)
 
+#ifdef __cplusplus
 #define PR_EXTERN extern "C"
+#else
+#define PR_EXTERN 
+#endif
 
 #define PR_SIZEOF(x) (int)(sizeof(x))
 #define PR_ARRAYSIZEU(arr) (sizeof(arr) / sizeof(arr[0]))

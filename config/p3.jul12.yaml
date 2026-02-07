@@ -216,7 +216,7 @@ segments:
 
         - [0x90440,  databin, common_ipk] # common_ipk_start/common_ipk_end
 
-        - [0x28C458, data, prlib/database]
+        - [0x28C458, .data, prlib/database]
         - [0x28C480, data, prlib/renderstuff]
         - [0x28C500, data, prlib/render]
         - [0x28C580, data, prlib/renderee]
@@ -370,7 +370,7 @@ segments:
 
         - [0x2998B8, .sdata, prlib/gifreg]
         - [0x2998BC, sdata, prlib/model]
-        - [0x2998C4, sdata, prlib/database]
+        - [0x2998C4, .sdata, prlib/database]
         - [0x2998C8, sdata, prlib/renderstuff]
         - [0x2998CC, .sdata, prlib/prlib]
         - [0x2998E0, sdata, prlib/render]

@@ -3,6 +3,11 @@
 
 #include "common.h"
 
+#include "objectset.h"
+#include "animation.h"
+#include "camera.h"
+#include "scene.h"
+
 #include <eetypes.h>
 #include <libgraph.h>
 
@@ -20,8 +25,9 @@ public:
     void DeleteScene(PrSceneObject *scene);
 
 public:
-    PrSceneObject *unk0;
-    PR_PADDING(unk4, 0xb);
+    PrObjectSet<PrSceneObject> m_scene_set;
+    PrObjectSet<SpaFileHeader> m_animation_set;
+    PrObjectSet<SpcFileHeader> m_camera_set;
 };
 
 extern PrObjectDatabase prObjectDatabase;

@@ -34,7 +34,9 @@ public:
     void PrepareScreenModelRender();
 
 public:
-    PR_PADDING(unk0, 0x10);
+    PrLinkedList<PrSceneObject> m_list;
+    PrObjectSet<PrSceneObject> *m_obj_set;
+    PR_PADDING(unkC, 0x4);
     PrPERSPECTIVE_CAMERA m_default_camera;
     sceGsFrame unk50;
     sceGsXyoffset unk58;
@@ -52,6 +54,7 @@ public:
     PrModelObject *unk98;
     PrModelObject *unk9C;
     PrModelObject *m_screen_model_list;
+    PR_PADDING(unkA4, 0x8);
 };
 
 #endif /* PRLIB_SCENE_H */

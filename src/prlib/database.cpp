@@ -1,29 +1,55 @@
 #include "database.h"
+#include "prlib/prlib.h"
 
-/* .sdata */
-extern bool databaseInitialized;
+PrObjectDatabase prObjectDatabase;
 
-INCLUDE_ASM("asm/nonmatchings/prlib/database", __16PrObjectDatabase);
+static bool databaseInitialized = false;
 
-INCLUDE_ASM("asm/nonmatchings/prlib/database", _$_16PrObjectDatabase);
+PrObjectDatabase::PrObjectDatabase() {
+}
+
+PrObjectDatabase::~PrObjectDatabase() {
+}
 
 void PrObjectDatabase::Initialize() {
     databaseInitialized = true;
 }
 
-INCLUDE_ASM("asm/nonmatchings/prlib/database", Cleanup__16PrObjectDatabase);
+void PrObjectDatabase::Cleanup() {
+    if (databaseInitialized) {
+        databaseInitialized = false;
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/prlib/database", CreateScene__16PrObjectDatabaseP13sceGsDrawEnv1PCcUi);
+PrSceneObject* PrObjectDatabase::CreateScene(sceGsDrawEnv1 *draw_env, const char *name, u_int fbp) {
+    PrSceneObject *scene = new PrSceneObject(draw_env, name, fbp);
+    m_scene_set.Insert(scene);
+    return scene;
+}
 
-INCLUDE_ASM("asm/nonmatchings/prlib/database", DeleteScene__16PrObjectDatabaseP13PrSceneObject);
+void PrObjectDatabase::DeleteScene(PrSceneObject *scene) {
+    if (scene == NULL) return;
+    PrCleanupAllSceneModel(scene);
 
-INCLUDE_ASM("asm/nonmatchings/prlib/database", _GLOBAL_$D$prObjectDatabase);
-
-INCLUDE_ASM("asm/nonmatchings/prlib/database", _GLOBAL_$I$prObjectDatabase);
-
-/* objectset.h */
-INCLUDE_ASM("asm/nonmatchings/prlib/database", _$_t11PrObjectSet1Z13SpcFileHeader);
-
-INCLUDE_ASM("asm/nonmatchings/prlib/database", _$_t11PrObjectSet1Z13SpaFileHeader);
-
-INCLUDE_ASM("asm/nonmatchings/prlib/database", _$_t11PrObjectSet1Z13PrSceneObject);
+    if (scene->m_obj_set != NULL) {
+        scene->m_obj_set = NULL;
+        PrSceneObject *next = scene->m_list.next;
+        PrSceneObject *prev = scene->m_list.prev;
+        if (next != NULL) {
+            next->m_list.prev = prev;
+            scene->m_list.next = NULL;
+        } else {
+            m_scene_set.m_tail = prev;
+        }
+        if (prev != NULL) {
+            prev->m_list.next = next;
+            scene->m_list.prev = NULL;
+        } else {
+            m_scene_set.m_head = next;
+        }
+        m_scene_set.m_num--;
+    }
+    if (scene != NULL) {
+        delete scene;
+    }
+}

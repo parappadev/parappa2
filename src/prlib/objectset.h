@@ -13,7 +13,7 @@ public:
         m_tail = NULL;
         m_num  = 0;
     }
-    ~PrObjectSet();
+    ~PrObjectSet() {}
 
     void Insert(T *obj) {
         if (m_tail == NULL) {
