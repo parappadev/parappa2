@@ -28,6 +28,27 @@ public:
         m_num++;
     }
 
+    void Remove(T *obj) {
+        if (obj->m_obj_set != NULL) {
+            obj->m_obj_set = NULL;
+            T *next = obj->m_list.next;
+            T *prev = obj->m_list.prev;
+            if (next != NULL) {
+                next->m_list.prev = prev;
+                obj->m_list.next = NULL;
+            } else {
+                m_tail = prev;
+            }
+            if (prev != NULL) {
+                prev->m_list.next = next;
+                obj->m_list.prev = NULL;
+            } else {
+                m_head = next;
+            }
+            m_num--;
+        }
+    }
+
 public:
     T *m_head;
     T *m_tail;

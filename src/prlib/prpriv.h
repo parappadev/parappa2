@@ -59,6 +59,7 @@ void PrCleanupModel(PrModelObject *model);
 void PrCleanupAnimation(SpaFileHeader *model);
 void PrCleanupCamera(SpcFileHeader *camera);
 void PrCleanupScene(PrSceneObject *scene);
+void PrCleanupAllSceneModel(PrSceneObject *scene);
 
 }
 

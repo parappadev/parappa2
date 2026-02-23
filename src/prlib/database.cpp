@@ -6,9 +6,11 @@ PrObjectDatabase prObjectDatabase;
 static bool databaseInitialized = false;
 
 PrObjectDatabase::PrObjectDatabase() {
+    /* Empty */
 }
 
 PrObjectDatabase::~PrObjectDatabase() {
+    /* Empty */
 }
 
 void PrObjectDatabase::Initialize() {
@@ -28,28 +30,11 @@ PrSceneObject* PrObjectDatabase::CreateScene(sceGsDrawEnv1 *draw_env, const char
 }
 
 void PrObjectDatabase::DeleteScene(PrSceneObject *scene) {
-    if (scene == NULL) return;
+    if (scene == NULL) {
+        return;
+    }
     PrCleanupAllSceneModel(scene);
 
-    if (scene->m_obj_set != NULL) {
-        scene->m_obj_set = NULL;
-        PrSceneObject *next = scene->m_list.next;
-        PrSceneObject *prev = scene->m_list.prev;
-        if (next != NULL) {
-            next->m_list.prev = prev;
-            scene->m_list.next = NULL;
-        } else {
-            m_scene_set.m_tail = prev;
-        }
-        if (prev != NULL) {
-            prev->m_list.next = next;
-            scene->m_list.prev = NULL;
-        } else {
-            m_scene_set.m_head = next;
-        }
-        m_scene_set.m_num--;
-    }
-    if (scene != NULL) {
-        delete scene;
-    }
+    m_scene_set.Remove(scene);
+    delete scene;
 }
