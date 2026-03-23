@@ -24,6 +24,8 @@ from splat.segtypes.linker_entry import LinkerEntry
 ROOT = Path(__file__).parent
 TOOLS_DIR = ROOT / "tools"
 
+
+
 P3_YAML_FILE = "config/p3.jul12.yaml"
 P3_BASENAME = "SCPS_150.17"
 P3_LD_PATH = f"{P3_BASENAME}.ld"
@@ -50,6 +52,14 @@ EE_COMPILER_FLAGS = "-O2 -G8 -g -Wa,-Iinclude"
 EE_COMPILER_FLAGS_CXX = "-O2 -G8 -x c++ -fno-exceptions -fno-strict-aliasing -Wa,-Iinclude"
 IOP_COMPILER_FLAGS = f"-B {TOOLS_DIR}/toolchain/iop-gcc281/lib/gcc-lib/mipsel-scei-elfl/2.8.1/ -O0 -G0 -g -Wa,-Iinclude"
 DVP_COMPILER_FLAGS = "" # None (at the moment)
+
+nomatch = False
+
+# NOMATCH_FLAGS = '-DPRD_SHIFTABLE'
+if nomatch:
+    SHIFTABLE_FLAG = '-DPRD_SHIFTABLE'
+else:
+    SHIFTABLE_FLAG = ''
 
 EE_COMPILE_CMD = f"{EE_COMPILER_DIR}/ee-gcc -c {EE_COMMON_INCLUDES} {EE_COMPILER_FLAGS}"
 EE_COMPILE_CMD_CXX = f"{EE_COMPILER_DIR}/ee-gcc -c {EE_COMMON_INCLUDES} {EE_COMPILER_FLAGS_CXX}"
@@ -262,7 +272,7 @@ def build_stuff(linker_entries: List[LinkerEntry], is_irx: bool = False, append:
         ninja.rule(
             "ee_cc",
             description="ee_cc $in",
-            command=f"{EE_COMPILE_CMD} $in -o $out && {CROSS}strip $out -N dummy-symbol-name",
+            command=f"{EE_COMPILE_CMD} {SHIFTABLE_FLAG} $in -o $out && {CROSS}strip $out -N dummy-symbol-name",
         )
 
         ninja.rule(
@@ -391,12 +401,16 @@ def build_stuff(linker_entries: List[LinkerEntry], is_irx: bool = False, append:
 
     checksum_path = "config/p3.jul12.checksum.sha1" if not is_irx else "config/irx.wave2ps2.jul12.checksum.sha1"
 
-    ninja.build(
-        rom_path + ".ok",
-        "sha1sum",
-        checksum_path,
-        implicit=[rom_path],
-    )
+    if not nomatch:
+        ninja.build(
+            rom_path + ".ok",
+            "sha1sum",
+            checksum_path,
+            implicit=[rom_path],
+        )
+    else:
+        return
+
 
 def generate_objdiff_configuration(config: dict[str, Any]):
     """
@@ -670,13 +684,30 @@ if __name__ == "__main__":
         action="store_true",
     )
     parser.add_argument(
+        "-no_match",
+        "--no-match",
+        help="Build a shiftable, non-matching executable",
+        action="store_true",
+    )
+    parser.add_argument(
         "-objdiff",
         "--objdiff",
         help="Output objdiff JSONs (requires existing build)",
-        action="store_true"
+        action="store_true",
     )
+
+
     args = parser.parse_args()
 
+    if args.no_match:
+        SHIFTABLE_FLAG = '-DPRD_SHIFTABLE'
+        nomatch = True
+    else:
+        #there's probably a better way to do this but it works
+        SHIFTABLE_FLAG = ''
+        nomatch = False
+
+    
     if not args.noclean:
         if args.objdiff:
             # No clean with objdiff
@@ -686,7 +717,7 @@ if __name__ == "__main__":
 
     if args.cleansrc:
         shutil.rmtree("src", ignore_errors=True)
-
+    
     prepare_rom_from_elfs(TARGET_ELFS)
 
     split.main([Path(P3_YAML_FILE)], modes=["all"], verbose=False)
