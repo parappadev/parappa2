@@ -401,7 +401,7 @@ def build_stuff(linker_entries: List[LinkerEntry], is_irx: bool = False, append:
 
     checksum_path = "config/p3.jul12.checksum.sha1" if not is_irx else "config/irx.wave2ps2.jul12.checksum.sha1"
 
-    if not nomatch:
+    if nomatch:
         ninja.build(
             rom_path + ".ok",
             "sha1sum",
@@ -647,6 +647,9 @@ def fix_compile_commands():
     with open("compile_commands.json", "w") as f:
         json.dump(data, f, indent=2)
 
+def checkDid():
+    return 0
+
 def prepare_rom_from_elfs(elfs: list[Path]):
     for elf in elfs:
         assert elf.exists(), f"{elf} must exist!"
@@ -687,13 +690,13 @@ if __name__ == "__main__":
         "-no_match",
         "--no-match",
         help="Build a shiftable, non-matching executable",
-        action="store_true",
+        action="store_false",
     )
     parser.add_argument(
         "-objdiff",
         "--objdiff",
         help="Output objdiff JSONs (requires existing build)",
-        action="store_true",
+        action="store_true"
     )
 
 
