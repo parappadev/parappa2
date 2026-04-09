@@ -500,7 +500,14 @@ static int TsBGMLoadCheck(void) {
     return MenuVoiceBankSet(-1);
 }
 
-INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsBGMPause);
+void TsBGMPause(int flg) {
+    if (TsBGMState.state != 0) {
+        TsBGMState.chgReq = 0;
+        TsBGMState.cstate = 0;
+        TsBGMState.ctim = 0;
+        tsBGMONEPause(flg);
+    }
+}
 
 void TsBGMChangePos(int no) {
     BGMSTATE *pbgm = &TsBGMState;
@@ -679,7 +686,16 @@ static void TsSndFlow(int flg) {
 
 INCLUDE_ASM("asm/nonmatchings/menu/menusub", TSNumMov);
 
-INCLUDE_ASM("asm/nonmatchings/menu/menusub", TSNumRBack);
+float TSNumRBack(float rt, float bkrt) {
+    float limit = bkrt + 1.0f;
+    
+    rt *= (bkrt * 2.0f) + 1.0f;
+    if (limit < rt) {
+        rt = (limit * 2.0f) - rt;
+    }
+    
+    return rt;
+}
 
 static int TSLOOP(int no, int max) {
     return (no + max) % max;
@@ -841,7 +857,14 @@ void TsMENU_InitSystem(void) {
     CurFileInfo.repFileNo = -1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsMENU_EndSystem);
+void TsMENU_EndSystem(void) {
+    if (pCStageRank != 0) {
+        free(pCStageRank);
+    }
+    if (UserWork != 0) {
+        free(UserWork);
+    }
+}
 
 void TsMenu_RankingClear(void) {
     int             i;
@@ -2517,7 +2540,22 @@ void TsCMPMes_SetMes(int no) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsCMPMes_Draw);
+void TsCMPMes_Draw(SPR_PKT pk, SPR_PRM *spr) {
+    CMPMES_WORK *pmesw = &CmpMesWork;
+
+    if (pmesw->backSw) {
+        MNScene_DispSw(&MNS_JimakuBak, 1);
+        MNScene_Draw(&MNS_JimakuBak);
+    } else {
+        MNScene_DispSw(&MNS_JimakuBak, 0);
+    }
+
+    if ((u_int)pmesw->mesflg >= 0x1000) {
+        return;
+    }
+
+    _PkSubMsgPut(pk, spr, pmesw->mesflg & 0xffff, pmesw->px, pmesw->py, 0x807f7f7f);
+}
 
 void TsANIME_Init(ANIME_WK *wk) {
     memset(wk, 0, sizeof(*wk));
@@ -2581,7 +2619,11 @@ INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsGetRankingList);
 
 INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsPopCusAOff);
 
-INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsPopCusDim);
+void TsPopCusDim(POPCTIM *pfw, int n, int flg) {
+    if ((u_int)n < 16) {
+        pfw->bDim[n] = (u_short)flg;
+    }
+}
 
 void TsPopCusInit(POPCTIM *pfw,  int curIdx) {
     memset(pfw, 0, sizeof(*pfw));
