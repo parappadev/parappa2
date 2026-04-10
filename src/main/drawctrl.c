@@ -1625,9 +1625,9 @@ int DrawAlphaBlendDisp(void *para_pp, int frame, int first_f, int useDisp, int d
 }
 
 int DrawMozaikuDisp(void *para_pp, int frame, int first_f, int useDisp, int drDisp) {
-    sceGsFrame *frame_pp;
-    sceGsFrame *gsframe_pp;
-    sceGifPacket gifpk[2];
+    sceGsFrame   *frame_pp;
+    sceGsFrame   *gsframe_pp;
+    sceGifPacket  gifpk[2];
 
     if (first_f == DRPRGF_INIT) {
         return 0;
@@ -1640,9 +1640,9 @@ int DrawMozaikuDisp(void *para_pp, int frame, int first_f, int useDisp, int drDi
     gsframe_pp = DrawGetFrameP(drDisp);
 
     CmnGifADPacketMake(gifpk, gsframe_pp);
-    
-    ((u64 *)gifpk)[2] = (u64)(*(u32 *)gsframe_pp) | 0x1f1f1f1f00000000ULL;
-    
+
+    ((u64 *)gifpk)[2] = (u64)(*(u32 *)gsframe_pp) | 0x1f1f1f1f00000000;
+
     UG_MozaikuDisp(para_pp, frame_pp, gifpk);
     CmnGifADPacketMakeTrans(gifpk);
 
@@ -1675,7 +1675,56 @@ int DrawTim2DIsp(void *para_pp, int frame, int first_f, int useDisp, int drDisp)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/main/drawctrl", DrawNoodlesDisp);
+int DrawNoodlesDisp(void *para_pp, int frame, int first_f, int useDisp, int drDisp) {
+    NOODLES_STR  *ndl_pp;
+    sceGsFrame   *draw_pp;
+    sceGsFrame   *use_pp;
+    sceGsFrame   *col_pp;
+    void         *tim2_pp;
+    sceGifPacket  gifpk;
+
+    if (first_f == DRPRGF_INIT) {
+        return 0;
+    }
+    if (first_f == DRPRGF_RESET) {
+        return 0;
+    }
+
+    ndl_pp = para_pp;
+    use_pp = DrawGetFrameP(useDisp);
+    draw_pp = DrawGetFrameP(drDisp);
+    col_pp = DrawGetFrameP(DNUM_ZBUFF);
+
+    CmnGifADPacketMake(&gifpk, draw_pp);
+
+    tim2_pp = GetIntAdrsCurrent(ndl_pp->texnum);
+    Tim2Trans_TBP_MODE(tim2_pp, use_pp->FBP << 5, 0x1b);
+
+    tim2_pp = GetIntAdrsCurrent(ndl_pp->texnum);
+    Tim2TransColor_TBP(tim2_pp, col_pp->FBP << 5);
+
+    sceGifPkAddGsAD(&gifpk, SCE_GS_TEX0_1,
+                    SCE_GS_SET_TEX0(use_pp->FBP << 5, use_pp->FBW, 0x1b,
+                                    10, 8, 1, 0,
+                                    col_pp->FBP << 5, 2, 0, 0, 1));
+    sceGifPkAddGsAD(&gifpk, SCE_GS_TEX1_1, 0);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_TEST_1, 0x33001);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_ALPHA_1, 0x44);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_TEXA, 0x4000008000);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_PRIM, 0x156);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_FRAME_1, *(u_long *)use_pp);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_UV, 0);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_XYZ2, 0x179006c00);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_UV, 0x0e002800);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_XYZ2, 0x187009400);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_TEXFLUSH, 0);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_FRAME_1, *(u_long *)draw_pp);
+
+    UG_NoodlesDisp(para_pp, use_pp, &gifpk, frame);
+    CmnGifADPacketMakeTrans(&gifpk);
+
+    return 0;
+}
 
 extern const char D_00393300[]; /* "local vram copy\n" */
 
