@@ -199,9 +199,9 @@ static void  tsBGMONEPause(int flg);
 static void  TsBGMStop(int time);
 /* static */ void  TsBGMMute(int time);
 static int   TsBGMLoadCheck(void);
-/* static */ void  TsBGMPause(int flg);
+static void  TsBGMPause(int flg);
 /* static */ void  TsBGMPoll(void);
-/* static */ void* TsCmnPkOpen(sceGifPacket *pgifpk);
+static void* TsCmnPkOpen(sceGifPacket *pgifpk);
 /* static */ void  TsCmnPkClose(sceGifPacket *pgifpk, void *pk, int pri);
 static void  TsClearMenuPad(int no);
 static void  TsGetMenuPad(int no, u_int *getpad);
@@ -209,7 +209,7 @@ static void  TsSndFlow(int flg);
 /* static */ int   TSNumMov(int cn, int dn, int scale);
 static int   TSLOOP(int no, int max);
 static int   TSLIMIT(int no, int min, int max);
-/* static */ int   TsMENU_GetMapNo(int *psize);
+static int   TsMENU_GetMapNo(int *psize);
 static void  TsMENU_GetMapTimeState(int flg);
 /* static */ void  TsSetScene_Map(MN_SCENE *pScene, int mapNo, int tflg, int bFocus);
 static void  TsSet_ParappaCapColor(void);
@@ -246,7 +246,7 @@ static int   TsMCAMes_GetSelect(void);
 static int   TsMCAMes_IsON(void);
 /* static */ void  TsMCAMes_Flow(u_int tpad);
 /* static */ void  TsMCAMes_Draw(SPR_PKT pk, SPR_PRM *spr);
-/* static */ void  TsCMPMes_Draw(SPR_PKT pk, SPR_PRM *spr);
+static void  TsCMPMes_Draw(SPR_PKT pk, SPR_PRM *spr);
 static void  TsANIME_Init(ANIME_WK *wk);
 /* static */ int   TsANIME_Poll(ANIME_WK *wk);
 static void  TsANIME_Start(ANIME_WK *wk, int state, int tim);
@@ -500,7 +500,7 @@ static int TsBGMLoadCheck(void) {
     return MenuVoiceBankSet(-1);
 }
 
-void TsBGMPause(int flg) {
+static void TsBGMPause(int flg) {
     if (TsBGMState.state != 0) {
         TsBGMState.chgReq = 0;
         TsBGMState.cstate = 0;
@@ -525,7 +525,17 @@ void TsBGMChangePos(int no) {
 
 INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsBGMPoll);
 
-INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsCmnPkOpen);
+static void *TsCmnPkOpen(sceGifPacket *pgifpk) {
+    CmnGifOpenCmnPk(pgifpk);
+
+    sceGifPkAddGsAD(pgifpk, SCE_GS_PABE, 0);
+    sceGifPkAddGsAD(pgifpk, SCE_GS_FBA_1, 0);
+    sceGifPkAddGsAD(pgifpk, SCE_GS_TEST_1, 0x30000);
+
+    sceGifPkCloseGifTag(pgifpk);
+
+    return pgifpk->pCurrent;
+}
 
 INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsCmnPkClose);
 
@@ -711,7 +721,51 @@ static int TSLIMIT(int no, int min, int max) {
     return no;
 }
 
-INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsMENU_GetMapNo);
+static int TsMENU_GetMapNo(int *psize) {
+    int mapno;
+    int size;
+    int flg;
+
+    mapno = 9;
+    if (pP3GameState->pLog->nRound < 1) {
+        flg   = pP3GameState->pLog->clrFlg[0];
+        mapno = 1;
+
+        if (flg != 0) {
+            do {
+                flg >>= 1;
+                mapno++;
+            } while (flg != 0);
+        }
+
+        if (mapno > 9) {
+            mapno = 9;
+        }
+    }
+
+    if (mapno == 0) {
+        size = 0;
+        goto end;
+    }
+
+    if (mapno < 2) {
+        size = 1;
+    } else if (mapno < 4) {
+        size = 2;
+    } else {
+        size = 4;
+        if (mapno < 5) {
+            size = 3;
+        }
+    }
+
+end:
+    if (psize != 0) {
+        *psize = size;
+    }
+
+    return mapno;
+}
 
 static inline int PrBcdInt(u_int n) {
     return (((n / 16) * 10) + (n % 16));
@@ -996,7 +1050,26 @@ void TsMenu_End(void) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsMenu_InitFlow);
+void TsMenu_InitFlow(P3GAMESTATE *pstate) {
+    pstate->pAutoMove = 0;
+    pstate->curRecJacket = 0;
+    
+    pP3GameState = pstate;
+    TsSet_ParappaCapColor();
+    
+    switch (pstate->endFlg) {
+        case 0:
+            TsMap_Flow(1, 3, 0);
+            break;
+        case 1:
+            TsClearSet(pP3GameState);
+            TsMap_Flow(1, 2, 0);
+            break;
+        case 2:
+            TsMap_Flow(1, 1, 0);
+            break;
+    }
+}
 
 int TsMenuMemcChk_Flow(void) {
     u_int tpad, tpad2;
@@ -1014,7 +1087,22 @@ int TsMenuMemcChk_Flow(void) {
     return ret;
 }
 
-INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsMenu_Flow);
+int TsMenu_Flow(void) {
+    u_int tpad, tpad2;
+    int   ret;
+
+    TsGetMenuPad(0, &tpad);
+    TsGetMenuPad(1, &tpad2);
+    
+    ret = TsMap_Flow(0, tpad, tpad2);
+    
+    TsMCAMes_Flow(tpad);
+    TsSCFADE_Flow(0, 0);
+    TsBGMPoll();
+    TsSndFlow(0);
+    
+    return ret;
+}
 
 void TsMenu_Draw(void) {
     SPR_PRM    SprPrm;
@@ -2540,7 +2628,7 @@ void TsCMPMes_SetMes(int no) {
     }
 }
 
-void TsCMPMes_Draw(SPR_PKT pk, SPR_PRM *spr) {
+static void TsCMPMes_Draw(SPR_PKT pk, SPR_PRM *spr) {
     CMPMES_WORK *pmesw = &CmpMesWork;
 
     if (pmesw->backSw) {
