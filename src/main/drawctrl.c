@@ -70,6 +70,7 @@
 /* sbss 399a78 */ extern MEN_CTRL_ENUM men_ctrl_enum; /* static */
 /* bss 1c6fe98 */ extern SCENECTRL *check_scenectrl[20]; /* static */
 /* sbss 399a7c */ extern u_char ddbg_pause_f; /* static */
+/* sdata 399340 */ extern int oddeven_idx; /* static */
 
 static void  UseGsRegSet(void);
 static void  UseGsSetXyOffset(int ofs);
@@ -1469,7 +1470,43 @@ void DrawObjStrTapTimeNext(SCENE_OBJDATA *sod_pp) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/main/drawctrl", DrawObjTapCtrl);
+void DrawObjTapCtrl(SCENE_OBJDATA *sod_pp, DR_TAP_REQ *tap_pp, int tap_num) {
+    int num;
+    short tap_id;
+    short req_no;
+
+    num = tap_num;
+
+    WorkClear((sod_pp->objactprg_ctrl).objactprg[OBJACTPRG_TAP], (sod_pp->objactprg_ctrl).num * 28);
+
+    if (0 < num) {
+        do {
+            tap_id = tap_pp->tap_id;
+
+            if (tap_id == 0xfe) {
+                req_no = tap_pp->req_no;
+            } else if (sod_pp->tap_id != tap_id) {
+                goto next;
+            } else {
+                req_no = tap_pp->req_no;
+            }
+
+            if (sod_pp->objtapstr_size <= req_no) {
+                printf(" TAP REQ Table over!! ID:%d num:%d\n", tap_id, req_no);
+                goto next;
+            }
+
+            DrawObjTapStrTapReq(sod_pp, req_no, 0, tap_pp->pad_prs_pp);
+
+next:
+            tap_pp++;
+        } while (--num != 0);
+    }
+
+    for (num = 0; num < sod_pp->tapstr_size; num++) {
+        DrawObjStrDispTap(sod_pp, num);
+    }
+}
 
 extern const char D_00399520[]; /* .sdata - "nome_" */
 
@@ -1587,7 +1624,30 @@ int DrawAlphaBlendDisp(void *para_pp, int frame, int first_f, int useDisp, int d
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/main/drawctrl", DrawMozaikuDisp);
+int DrawMozaikuDisp(void *para_pp, int frame, int first_f, int useDisp, int drDisp) {
+    sceGsFrame   *frame_pp;
+    sceGsFrame   *gsframe_pp;
+    sceGifPacket  gifpk[2];
+
+    if (first_f == DRPRGF_INIT) {
+        return 0;
+    }
+    if (first_f == DRPRGF_RESET) {
+        return 0;
+    }
+
+    frame_pp = DrawGetFrameP(useDisp);
+    gsframe_pp = DrawGetFrameP(drDisp);
+
+    CmnGifADPacketMake(gifpk, gsframe_pp);
+
+    ((u64 *)gifpk)[2] = (u64)(*(u32 *)gsframe_pp) | 0x1f1f1f1f00000000;
+
+    UG_MozaikuDisp(para_pp, frame_pp, gifpk);
+    CmnGifADPacketMakeTrans(gifpk);
+
+    return 0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/main/drawctrl", DrawFadeDisp);
 
@@ -1615,7 +1675,56 @@ int DrawTim2DIsp(void *para_pp, int frame, int first_f, int useDisp, int drDisp)
     return 0;
 }
 
-INCLUDE_ASM("asm/nonmatchings/main/drawctrl", DrawNoodlesDisp);
+int DrawNoodlesDisp(void *para_pp, int frame, int first_f, int useDisp, int drDisp) {
+    NOODLES_STR  *ndl_pp;
+    sceGsFrame   *draw_pp;
+    sceGsFrame   *use_pp;
+    sceGsFrame   *col_pp;
+    void         *tim2_pp;
+    sceGifPacket  gifpk;
+
+    if (first_f == DRPRGF_INIT) {
+        return 0;
+    }
+    if (first_f == DRPRGF_RESET) {
+        return 0;
+    }
+
+    ndl_pp = para_pp;
+    use_pp = DrawGetFrameP(useDisp);
+    draw_pp = DrawGetFrameP(drDisp);
+    col_pp = DrawGetFrameP(DNUM_ZBUFF);
+
+    CmnGifADPacketMake(&gifpk, draw_pp);
+
+    tim2_pp = GetIntAdrsCurrent(ndl_pp->texnum);
+    Tim2Trans_TBP_MODE(tim2_pp, use_pp->FBP << 5, 0x1b);
+
+    tim2_pp = GetIntAdrsCurrent(ndl_pp->texnum);
+    Tim2TransColor_TBP(tim2_pp, col_pp->FBP << 5);
+
+    sceGifPkAddGsAD(&gifpk, SCE_GS_TEX0_1,
+                    SCE_GS_SET_TEX0(use_pp->FBP << 5, use_pp->FBW, 0x1b,
+                                    10, 8, 1, 0,
+                                    col_pp->FBP << 5, 2, 0, 0, 1));
+    sceGifPkAddGsAD(&gifpk, SCE_GS_TEX1_1, 0);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_TEST_1, 0x33001);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_ALPHA_1, 0x44);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_TEXA, 0x4000008000);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_PRIM, 0x156);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_FRAME_1, *(u_long *)use_pp);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_UV, 0);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_XYZ2, 0x179006c00);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_UV, 0x0e002800);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_XYZ2, 0x187009400);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_TEXFLUSH, 0);
+    sceGifPkAddGsAD(&gifpk, SCE_GS_FRAME_1, *(u_long *)draw_pp);
+
+    UG_NoodlesDisp(para_pp, use_pp, &gifpk, frame);
+    CmnGifADPacketMakeTrans(&gifpk);
+
+    return 0;
+}
 
 extern const char D_00393300[]; /* "local vram copy\n" */
 
@@ -1693,7 +1802,48 @@ static int drawDispCheckSub(u_int drD, u_int *dat_pp) {
     return drawDispCheckSub(drD, &drDispFlag);
 }
 
-INCLUDE_ASM("asm/nonmatchings/main/drawctrl", DrawScenectrlReq);
+int DrawScenectrlReq(SCENECTRL *scenectrl_pp, u_int time) {
+    int ret = 0;
+    int useDispCheck;
+    int drDispCheck;
+    int active;
+
+    active = !(time < scenectrl_pp->start_flame);
+    if (!(time < scenectrl_pp->end_flame)) {
+        active = 0;
+    }
+
+    if (scenectrl_pp->prg_pp == NULL) {
+        return -1;
+    }
+
+    if (active) {
+        useDispCheck = drawUseDispCheck(scenectrl_pp->useDisp);
+        drDispCheck = drawDrDispCheck(scenectrl_pp->drDisp);
+
+        if (drDispCheck != 2) {
+            if (drDispCheck == 16) {
+                UseGsSetXyOffset(0);
+            }
+        } else if (oddeven_idx & 1) {
+            UseGsSetXyOffset(0);
+        } else {
+            UseGsSetXyOffset(1);
+        }
+
+        if (scenectrl_pp->use_flag == 0) {
+            ret = scenectrl_pp->prg_pp(scenectrl_pp->param_pp, time - scenectrl_pp->start_flame, 0, useDispCheck, drDispCheck);
+            scenectrl_pp->use_flag = 1;
+        } else {
+            ret = scenectrl_pp->prg_pp(scenectrl_pp->param_pp, time - scenectrl_pp->start_flame, 1, useDispCheck, drDispCheck);
+        }
+    } else if (scenectrl_pp->use_flag != 0) {
+        ret = scenectrl_pp->prg_pp(scenectrl_pp->param_pp, 0, -1, 0, 0);
+        scenectrl_pp->use_flag = 0;
+    }
+
+    return ret;
+}
 
 void MendererCtrlInit(void) {
     men_ctrl_ratio = 0.0f;
