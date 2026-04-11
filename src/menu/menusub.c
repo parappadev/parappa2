@@ -1210,7 +1210,30 @@ int DateChgInt(u_int n) {
     );
 }
 
-INCLUDE_ASM("asm/nonmatchings/menu/menusub", GetRankScoreID);
+void GetRankScoreID(MAP_TIME *mptim, u_int *dat) {
+    int year;
+    int second;
+    int hour;
+    int day;
+    int month;
+    int minute;
+    int score;
+
+    year = DateChgInt(mptim->date_year);
+    second = DateChgInt(mptim->date_second);
+    hour = DateChgInt(mptim->date_hour);
+    day = DateChgInt(mptim->date_day);
+    month = DateChgInt(mptim->date_month);
+    minute = DateChgInt(mptim->date_minute);
+
+    score = (year % 50) * 32140800 + (second % 60);
+    score += (hour % 24) * 3600 + (day % 31) * 86400;
+    score += (month % 12) * 2678400 + (minute % 60) * 60;
+
+    dat[0] = score;
+
+    dat[1] = ((rand() % 65536) << 8) + mptim->date_pad;
+}
 
 INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsRanking_Set);
 
