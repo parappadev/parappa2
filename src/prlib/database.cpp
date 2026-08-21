@@ -26,7 +26,7 @@ void PrObjectDatabase::Cleanup() {
 
 PrSceneObject* PrObjectDatabase::CreateScene(sceGsDrawEnv1 *draw_env, const char *name, u_int fbp) {
     PrSceneObject *scene = new PrSceneObject(draw_env, name, fbp);
-    m_scene_set.Insert(scene);
+    InsertScene(scene);
     return scene;
 }
 
@@ -36,6 +36,6 @@ void PrObjectDatabase::DeleteScene(PrSceneObject *scene) {
     }
 
     PrCleanupAllSceneModel(scene);
-    m_scene_set.Remove(scene);
+    RemoveScene(scene);
     delete scene;
 }

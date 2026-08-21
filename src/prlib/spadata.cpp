@@ -6,7 +6,7 @@
 #include <math.h>
 
 template <>
-NaVECTOR<float, 4>* SpaTrack<NaVECTOR<float, 4> >::GetSprineValue(u_int seg, float arg1) const;
+const NaVECTOR<float, 4>* SpaTrack<NaVECTOR<float, 4> >::GetSprineValue(u_int seg, float arg1) const;
 
 u_int SpaTrackBase::SearchSegment(float arg0) const {
     if (this->unk4 == 1) {
@@ -57,7 +57,7 @@ u_int SpaTrackBase::SearchSegment(float arg0) const {
 }
 
 template <>
-int* SpaTrack<int>::GetValue(float arg0) const {
+const int* SpaTrack<int>::GetValue(float arg0) const {
     if (this->unk2 & 0x1) {
         float f13 = this->unkC[this->unk4 - 1];
         if (arg0 < 0.0f || arg0 >= f13) {
@@ -67,13 +67,13 @@ int* SpaTrack<int>::GetValue(float arg0) const {
 
     u_int seg = this->SearchSegment(arg0);
     if (seg == (u_int)-1) {
-        return (int*)&this->unk10;
+        return &this->unk10[0];
     }
 
     if (seg == this->unk4) {
-        return (int*)&this->unkC + seg;
+        return &this->unk10[seg - 1];
     } else {
-        return (int*)&this->unk10 + seg;
+        return &this->unk10[seg];
     }
 }
 
@@ -90,7 +90,7 @@ bool SpaNodeAnimation::IsVisible(float arg0) const {
 }
 
 bool SpaFileHeader::IsNodeVisible(SpmNode *arg0, float arg1) const {
-    SpaNodeAnimation *a0 = this->unk50[arg0->unk150];
+    SpaNodeAnimation *a0 = m_nodes[arg0->unk150];
     SpmNode *a2 = arg0->unk164;
 
     if (a0 != NULL && a0->unk4 == NULL) {
@@ -224,7 +224,7 @@ int SpaNodeAnimation::Optimize() {
 INCLUDE_ASM("asm/nonmatchings/prlib/spadata", GetLinearValue__Ct8SpaTrack1Zt8NaVECTOR2Zfi4Uif);
 
 template <>
-NaVECTOR<float, 4>* SpaTrack<NaVECTOR<float, 4> >::GetValue(float arg0) const {
+const NaVECTOR<float, 4>* SpaTrack<NaVECTOR<float, 4> >::GetValue(float arg0) const {
     if (this->unk2 & 0x1) {
         float f13 = this->unkC[this->unk4 - 1];
         if (arg0 < 0.0f || arg0 >= f13) {
@@ -235,14 +235,14 @@ NaVECTOR<float, 4>* SpaTrack<NaVECTOR<float, 4> >::GetValue(float arg0) const {
     u_int seg = this->SearchSegment(arg0);
 
     if (seg == (u_int)-1) {
-        return (NaVECTOR<float, 4>*)&this->unk10;
+        return &this->unk10[0];
     }
 
     if (seg == this->unk4) {
         if (this->unk0 == 0) {
-            return (NaVECTOR<float, 4>*)&this->unk10 + ((seg - 1) * 3);
+            return &this->unk10[(seg - 1) * 3];
         } else {
-            return (NaVECTOR<float, 4>*)this + seg;
+            return &this->unk10[seg - 1];
         }
     }
 
@@ -252,7 +252,7 @@ NaVECTOR<float, 4>* SpaTrack<NaVECTOR<float, 4> >::GetValue(float arg0) const {
     case 1:
         return this->GetLinearValue(seg, arg0);
     case 2:
-        return (NaVECTOR<float, 4>*)&this->unk10 + seg;
+        return &this->unk10[seg];
     default:
         break;
     }
@@ -288,9 +288,9 @@ INCLUDE_ASM("asm/nonmatchings/prlib/spadata", func_0014ACE8);
 INCLUDE_ASM("asm/nonmatchings/prlib/spadata", func_0014AFE0);
 
 template <>
-NaVECTOR<float, 4>* SpaTrack<NaVECTOR<float, 4> >::GetSprineValue(u_int seg, float arg1) const {
+const NaVECTOR<float, 4>* SpaTrack<NaVECTOR<float, 4> >::GetSprineValue(u_int seg, float arg1) const {
     float f2 = this->unkC[seg + 1] - this->unkC[seg];
-    NaVECTOR<float, 4> *a0 = (NaVECTOR<float, 4>*)&this->unk10 + (seg * 3);
+    const NaVECTOR<float, 4> *a0 = &this->unk10[seg * 3];
     if (f2 == 0.0f) {
         return a0;
     }

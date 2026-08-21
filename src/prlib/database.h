@@ -25,6 +25,25 @@ public:
     void DeleteScene(PrSceneObject *scene);
 
 public:
+    void InsertScene(PrSceneObject *scene) {
+        m_scene_set.Insert(scene);
+    }
+    void RemoveScene(PrSceneObject *scene) {
+        if (scene->m_obj_set != NULL) {
+            m_scene_set.Remove(scene);
+        }
+    }
+
+    void InsertAnimation(SpaFileHeader *animation) {
+        m_animation_set.Insert(animation);
+    }
+    void RemoveAnimation(SpaFileHeader *animation) {
+        if (animation->m_obj_set != NULL) {
+            m_animation_set.Remove(animation);
+        }
+    }
+
+public:
     PrObjectSet<PrSceneObject> m_scene_set;
     PrObjectSet<SpaFileHeader> m_animation_set;
     PrObjectSet<SpcFileHeader> m_camera_set;

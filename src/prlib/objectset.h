@@ -29,10 +29,6 @@ public:
     }
 
     void Remove(T *obj) {
-        if (obj->m_obj_set == NULL) {
-            return;
-        }
-
         obj->m_obj_set = NULL;
 
         T *next = obj->m_list.next;

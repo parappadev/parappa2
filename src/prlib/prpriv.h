@@ -73,7 +73,7 @@ PrModelObject* PrInitializeModel(SpmFileHeader *spm, PrSceneObject *scene);
 SpaFileHeader* PrInitializeAnimation(SpaFileHeader *spa);
 SpcFileHeader* PrInitializeCamera(SpcFileHeader *spc);
 void PrCleanupModel(PrModelObject *model);
-void PrCleanupAnimation(SpaFileHeader *model);
+void PrCleanupAnimation(SpaFileHeader *animation);
 void PrCleanupCamera(SpcFileHeader *camera);
 void PrCleanupAllSceneModel(PrSceneObject *scene);
 float PrGetAnimationStartFrame(SpaFileHeader *animation);

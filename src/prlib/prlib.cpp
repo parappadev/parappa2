@@ -118,13 +118,42 @@ PrModelObject* PrInitializeModel(SpmFileHeader *spm, PrSceneObject *scene) {
     return model;
 }
 
-INCLUDE_ASM("asm/nonmatchings/prlib/prlib", PrInitializeAnimation);
+PR_EXTERN
+SpaFileHeader* PrInitializeAnimation(SpaFileHeader *spa) {
+    if (spa->m_magic != SPA_MAGIC) {
+        exit(0);
+    }
+
+    if (spa->m_version != SPA_VERSION) {
+        exit(0);
+    }
+
+    spa->Initialize();
+    if (spa->m_obj_set == NULL) {
+        spa->m_user_data = NULL;
+        prObjectDatabase.InsertAnimation(spa);
+    }
+    return spa;
+}
 
 INCLUDE_ASM("asm/nonmatchings/prlib/prlib", PrInitializeCamera);
 
 INCLUDE_ASM("asm/nonmatchings/prlib/prlib", PrCleanupModel);
 
-INCLUDE_ASM("asm/nonmatchings/prlib/prlib", PrCleanupAnimation);
+PR_EXTERN
+void PrCleanupAnimation(SpaFileHeader *animation) {
+    if (animation == NULL) {
+        animation = prObjectDatabase.m_animation_set.m_head;
+        while (animation != NULL) {
+            PrCleanupAnimation(animation);
+            animation = prObjectDatabase.m_animation_set.m_head;
+        }
+    } else {
+        if (animation->m_obj_set != NULL) {
+            prObjectDatabase.RemoveAnimation(animation);
+        }
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/prlib/prlib", PrCleanupCamera);
 
@@ -149,13 +178,19 @@ INCLUDE_ASM("asm/nonmatchings/prlib/prlib", PrGetCameraEndFrame);
 
 INCLUDE_ASM("asm/nonmatchings/prlib/prlib", PrSetModelUserData);
 
-INCLUDE_ASM("asm/nonmatchings/prlib/prlib", PrSetAnimationUserData);
+PR_EXTERN
+void PrSetAnimationUserData(SpaFileHeader *animation, void *user_data) {
+    animation->m_user_data = user_data;
+}
 
 INCLUDE_ASM("asm/nonmatchings/prlib/prlib", PrSetCameraUserData);
 
 INCLUDE_ASM("asm/nonmatchings/prlib/prlib", PrGetModelUserData);
 
-INCLUDE_ASM("asm/nonmatchings/prlib/prlib", PrGetAnimationUserData);
+PR_EXTERN
+void* PrGetAnimationUserData(SpaFileHeader *animation) {
+    return animation->m_user_data;
+}
 
 INCLUDE_ASM("asm/nonmatchings/prlib/prlib", PrGetCameraUserData);
 
@@ -265,7 +300,10 @@ INCLUDE_ASM("asm/nonmatchings/prlib/prlib", PrGetVertexNum);
 
 INCLUDE_ASM("asm/nonmatchings/prlib/prlib", PrGetModelName);
 
-INCLUDE_ASM("asm/nonmatchings/prlib/prlib", PrGetAnimationName);
+PR_EXTERN
+char* PrGetAnimationName(SpaFileHeader *animation) {
+    return animation->m_name;
+}
 
 PR_EXTERN
 char* PrGetCameraName(SpcFileHeader *camera) {

@@ -1,15 +1,15 @@
 {
   "measures": {
-    "fuzzy_match_percent": 62.35173,
+    "fuzzy_match_percent": 62.52936,
     "total_code": "342284",
-    "matched_code": "213420",
-    "matched_code_percent": 62.351734,
+    "matched_code": "214028",
+    "matched_code_percent": 62.52936,
     "total_data": "26260848",
     "matched_data": "26148056",
     "matched_data_percent": 99.570496,
     "total_functions": 1429,
-    "matched_functions": 1126,
-    "matched_functions_percent": 78.796364,
+    "matched_functions": 1133,
+    "matched_functions_percent": 79.28621,
     "total_units": 70
   },
   "units": [
@@ -9990,16 +9990,16 @@
     {
       "name": "prlib/prlib",
       "measures": {
-        "fuzzy_match_percent": 38.294575,
+        "fuzzy_match_percent": 52.09302,
         "total_code": "2580",
-        "matched_code": "988",
-        "matched_code_percent": 38.294575,
+        "matched_code": "1344",
+        "matched_code_percent": 52.09302,
         "total_data": "56",
         "matched_data": "52",
         "matched_data_percent": 92.85714,
         "total_functions": 80,
-        "matched_functions": 31,
-        "matched_functions_percent": 38.75,
+        "matched_functions": 36,
+        "matched_functions_percent": 45.0,
         "total_units": 1
       },
       "sections": [
@@ -10028,7 +10028,7 @@
         {
           "name": ".text",
           "size": "2656",
-          "fuzzy_match_percent": 38.294575,
+          "fuzzy_match_percent": 52.09302,
           "metadata": {}
         }
       ],
@@ -10113,6 +10113,7 @@
         {
           "name": "PrInitializeAnimation",
           "size": "168",
+          "fuzzy_match_percent": 100.0,
           "metadata": {},
           "address": "640"
         },
@@ -10131,6 +10132,7 @@
         {
           "name": "PrCleanupAnimation",
           "size": "164",
+          "fuzzy_match_percent": 100.0,
           "metadata": {},
           "address": "1024"
         },
@@ -10182,6 +10184,7 @@
         {
           "name": "PrSetAnimationUserData",
           "size": "8",
+          "fuzzy_match_percent": 100.0,
           "metadata": {},
           "address": "1536"
         },
@@ -10200,6 +10203,7 @@
         {
           "name": "PrGetAnimationUserData",
           "size": "8",
+          "fuzzy_match_percent": 100.0,
           "metadata": {},
           "address": "1560"
         },
@@ -10458,6 +10462,7 @@
         {
           "name": "PrGetAnimationName",
           "size": "8",
+          "fuzzy_match_percent": 100.0,
           "metadata": {},
           "address": "2384"
         },
@@ -10556,14 +10561,14 @@
     {
       "name": "prlib/setpointer",
       "measures": {
-        "fuzzy_match_percent": 54.025425,
+        "fuzzy_match_percent": 63.559322,
         "total_code": "1888",
-        "matched_code": "1020",
-        "matched_code_percent": 54.025425,
+        "matched_code": "1200",
+        "matched_code_percent": 63.559322,
         "total_data": "32",
         "total_functions": 5,
-        "matched_functions": 3,
-        "matched_functions_percent": 60.000004,
+        "matched_functions": 4,
+        "matched_functions_percent": 80.0,
         "total_units": 1
       },
       "sections": [
@@ -10585,7 +10590,7 @@
         {
           "name": ".text",
           "size": "1896",
-          "fuzzy_match_percent": 54.025425,
+          "fuzzy_match_percent": 63.559322,
           "metadata": {}
         }
       ],
@@ -10611,6 +10616,7 @@
         {
           "name": "ChangePointer__13SpaFileHeader",
           "size": "180",
+          "fuzzy_match_percent": 100.0,
           "metadata": {
             "demangled_name": "SpaFileHeader::ChangePointer"
           },
@@ -13395,9 +13401,14 @@
     {
       "name": "prlib/animation",
       "measures": {
+        "fuzzy_match_percent": 100.0,
         "total_code": "72",
+        "matched_code": "72",
+        "matched_code_percent": 100.0,
         "matched_data_percent": 100.0,
         "total_functions": 1,
+        "matched_functions": 1,
+        "matched_functions_percent": 100.0,
         "complete_data_percent": 100.0,
         "total_units": 1
       },
@@ -13415,6 +13426,7 @@
         {
           "name": ".text",
           "size": "72",
+          "fuzzy_match_percent": 100.0,
           "metadata": {}
         }
       ],
@@ -13422,6 +13434,7 @@
         {
           "name": "Initialize__13SpaFileHeader",
           "size": "72",
+          "fuzzy_match_percent": 100.0,
           "metadata": {
             "demangled_name": "SpaFileHeader::Initialize"
           },
@@ -13724,16 +13737,16 @@
     {
       "id": "prlib",
       "measures": {
-        "fuzzy_match_percent": 21.83869,
+        "fuzzy_match_percent": 22.577665,
         "total_code": "82276",
-        "matched_code": "17968",
-        "matched_code_percent": 21.838688,
+        "matched_code": "18576",
+        "matched_code_percent": 22.577665,
         "total_data": "27692",
         "matched_data": "23416",
         "matched_data_percent": 84.558716,
         "total_functions": 360,
-        "matched_functions": 143,
-        "matched_functions_percent": 39.72222,
+        "matched_functions": 150,
+        "matched_functions_percent": 41.666664,
         "total_units": 33
       }
     }

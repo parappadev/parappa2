@@ -37,10 +37,10 @@ protected:
 template <typename T>
 class SpaTrack : public SpaTrackBase {
 public:
-    T* GetValue(float arg0) const;
+    const T* GetValue(float arg0) const;
 
-    T* GetSprineValue(u_int seg, float arg1) const;
-    T* GetLinearValue(u_int seg, float arg1) const;
+    const T* GetSprineValue(u_int seg, float arg1) const;
+    const T* GetLinearValue(u_int seg, float arg1) const;
 
 public:
     void ChangePointer() {
@@ -48,7 +48,7 @@ public:
     }
 
 private:
-    T *unk10;
+    T unk10[0];
 };
 
 class SpaTransform {
