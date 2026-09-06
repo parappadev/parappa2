@@ -1,3 +1,4 @@
+ReadPkSize = 0x3B00;
 modeCd = 0x3B04;
 BgmVolume = 0x3B08;
 CdErrCode = 0x3B0C;

@@ -1,15 +1,15 @@
 {
   "measures": {
-    "fuzzy_match_percent": 62.35173,
+    "fuzzy_match_percent": 62.85073,
     "total_code": "342284",
-    "matched_code": "213420",
-    "matched_code_percent": 62.351734,
+    "matched_code": "215128",
+    "matched_code_percent": 62.85073,
     "total_data": "26260848",
-    "matched_data": "26148056",
-    "matched_data_percent": 99.570496,
+    "matched_data": "26148072",
+    "matched_data_percent": 99.57056,
     "total_functions": 1429,
-    "matched_functions": 1126,
-    "matched_functions_percent": 78.796364,
+    "matched_functions": 1132,
+    "matched_functions_percent": 79.21623,
     "total_units": 70
   },
   "units": [
@@ -8855,16 +8855,16 @@
     {
       "name": "menu/pksprite",
       "measures": {
-        "fuzzy_match_percent": 79.87747,
+        "fuzzy_match_percent": 100.0,
         "total_code": "8488",
-        "matched_code": "6780",
-        "matched_code_percent": 79.87747,
+        "matched_code": "8488",
+        "matched_code_percent": 100.0,
         "total_data": "92",
-        "matched_data": "32",
-        "matched_data_percent": 34.782608,
+        "matched_data": "48",
+        "matched_data_percent": 52.173912,
         "total_functions": 51,
-        "matched_functions": 45,
-        "matched_functions_percent": 88.2353,
+        "matched_functions": 51,
+        "matched_functions_percent": 100.0,
         "total_units": 1
       },
       "sections": [
@@ -8876,6 +8876,7 @@
         {
           "name": ".data",
           "size": "16",
+          "fuzzy_match_percent": 100.0,
           "metadata": {}
         },
         {
@@ -8903,7 +8904,7 @@
         {
           "name": ".text",
           "size": "8624",
-          "fuzzy_match_percent": 79.87747,
+          "fuzzy_match_percent": 100.0,
           "metadata": {}
         }
       ],
@@ -9107,18 +9108,21 @@
         {
           "name": "PkNSprite_Add2",
           "size": "268",
+          "fuzzy_match_percent": 100.0,
           "metadata": {},
           "address": "3512"
         },
         {
           "name": "PkNSprite_AddAdj",
           "size": "268",
+          "fuzzy_match_percent": 100.0,
           "metadata": {},
           "address": "3784"
         },
         {
           "name": "PkCRect_Add",
           "size": "184",
+          "fuzzy_match_percent": 100.0,
           "metadata": {},
           "address": "4056"
         },
@@ -9146,6 +9150,7 @@
         {
           "name": "PkRSprite_Add",
           "size": "556",
+          "fuzzy_match_percent": 100.0,
           "metadata": {},
           "address": "4744"
         },
@@ -9159,6 +9164,7 @@
         {
           "name": "PkCLineS_AddStart",
           "size": "204",
+          "fuzzy_match_percent": 100.0,
           "metadata": {},
           "address": "5536"
         },
@@ -9172,6 +9178,7 @@
         {
           "name": "PkPolyF3_Add",
           "size": "228",
+          "fuzzy_match_percent": 100.0,
           "metadata": {},
           "address": "5888"
         },
@@ -13692,16 +13699,16 @@
     {
       "id": "menu",
       "measures": {
-        "fuzzy_match_percent": 49.15195,
+        "fuzzy_match_percent": 50.639084,
         "total_code": "114852",
-        "matched_code": "56452",
-        "matched_code_percent": 49.15195,
+        "matched_code": "58160",
+        "matched_code_percent": 50.63908,
         "total_data": "93716",
-        "matched_data": "45092",
-        "matched_data_percent": 48.115585,
+        "matched_data": "45108",
+        "matched_data_percent": 48.132656,
         "total_functions": 374,
-        "matched_functions": 294,
-        "matched_functions_percent": 78.60963,
+        "matched_functions": 300,
+        "matched_functions_percent": 80.213905,
         "total_units": 9
       }
     },

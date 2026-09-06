@@ -310,7 +310,7 @@ segments:
       - { path: asm/data/menu/memc.data.s.o }
       - { path: asm/data/menu/mntm2hed.data.s.o }
       - { path: asm/data/menu/menufont.data.s.o }
-      - { path: asm/data/menu/pksprite.data.s.o }
+      - { path: src/menu/pksprite.c.o }
 
       - { path: src/iop_mdl/wp2cd_rpc.c.o }
       - { path: src/iop_mdl/tapctrl_rpc.c.o }
@@ -667,7 +667,7 @@ segments:
       - { path: src/menu/memc.c.o }
       - { path: src/menu/mntm2hed.c.o }
       - { path: src/menu/menufont.c.o }
-      - { path: asm/data/menu/pksprite.lit4.s.o }
+      - { path: src/menu/pksprite.c.o }
 
       - { path: src/iop_mdl/wp2cd_rpc.c.o }
       - { path: src/iop_mdl/tapctrl_rpc.c.o }

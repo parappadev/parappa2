@@ -212,7 +212,7 @@ segments:
         - [0x8DDF8,  data, menu/memc]
         - [0x8E1D0,  data, menu/mntm2hed]
         - [0x8F580,  data, menu/menufont]
-        - [0x90430,  data, menu/pksprite]
+        - [0x90430, .data, menu/pksprite]
 
         - [0x90440,  databin, common_ipk] # common_ipk_start/common_ipk_end
 
@@ -329,7 +329,7 @@ segments:
         - [0x298F4C, .lit4, menu/menu_mdl]
         - [0x298F60, lit4, menu/menusub]
         - [0x2990C8, .lit4, menu/menufont]
-        - [0x2990DC, lit4, menu/pksprite]
+        - [0x2990DC, .lit4, menu/pksprite]
 
         - [0x2990E0, lit4, prlib/spram]
         - [0x299110, lit4, prlib/scene]

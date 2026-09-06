@@ -17,12 +17,10 @@ static sceGsZbuf _PkDefZBUFFER PR_ALIGNED(16) = {
 static int _PkScrW;
 static int _PkScrH;
 
-/* .lit4 */
-float FLT_003990DC; /* cannot be defined as extern, needed for `rotcossin` */
-
 static void   _tsWorkEnd(TS_WORKMEM *emem);
 static u_int* _tsWorkInit(TS_WORKMEM *emem, u_int *buf, u_int size);
 static void   PkDefReg_Add(SPR_PKT pkt);
+static void   rotcossin(float rot);
 
 static void _tsWorkEnd(TS_WORKMEM *emem) {
     if (emem->isAlloc && emem->top != NULL) {
@@ -662,11 +660,192 @@ void PkNSprite_Add(SPR_PKT pk, SPR_PRM *ppspr, int flg) {
     ((SprTagTF*)*pk) = sp + 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/menu/pksprite", PkNSprite_Add2);
+void PkNSprite_Add2(SPR_PKT pk, SPR_PRM *ppspr, int flg) {
+    SprTagTF *sp = (SprTagTF*)*pk;
 
-INCLUDE_ASM("asm/nonmatchings/menu/pksprite", PkNSprite_AddAdj);
+    ((u_long*)sp->GifCord)[0] = 0x6400000000008001;
+    ((u_long*)sp->GifCord)[1] = 0x434310;
 
-INCLUDE_ASM("asm/nonmatchings/menu/pksprite", PkCRect_Add);
+    sp->prim = SCE_GS_SET_PRIM(6, 0, 1, 0, 1, 0, 1, 0, 0);
+    sp->rgba = ppspr->rgba0;
+
+    if (flg & 0x1) {
+        asm volatile("lq $9, 0x20(%0)" : : "r"(ppspr) : "$9", "memory");
+    } else {
+        asm volatile("lq $9, 0x00(%0)" : : "r"(ppspr) : "$9", "memory");
+    }
+
+    asm volatile(
+        "lq     $8,  0x20(%1)  \n\t"
+        "li     $10, 0x4       \n\t"
+        "daddu  $9,  $0,  $8   \n\t"
+        "pcpyld $8,  $8,  $0   \n\t"
+        "paddw  $9,  $8,  $9   \n\t"
+        "psllw  $9,  $9,  0x4  \n\t"
+        "li     $8,  0x8       \n\t"
+        "pextlw $8,  $10, $8   \n\t"
+        "pextlw $8,  $8,  $8   \n\t"
+        "paddw  $8,  $9,  $8   \n\t"
+        "ppach  $9,  $0,  $8   \n\t"
+        "sd     $9,  0x20(%0)  \n\t"
+        "prot3w $10, $9        \n\t"
+        "sd     $10, 0x30(%0)  \n\t"
+    : : "r"(sp), "r"(ppspr) : "$8", "$9", "$10", "memory");
+
+    asm volatile(
+        "lqc2    $vf01, 0x00(%0)     \n\t"
+        "lqc2    $vf02, 0x10(%0)     \n\t"
+        "vitof0  $vf01, $vf01        \n\t"
+        "vmul.zw $vf01, $vf01, $vf02 \n\t"
+    : : "r"(ppspr) : "memory");
+
+    if ((flg & 0x2) && ppspr->zoom.isOn) {
+        asm volatile(
+            "lqc2    $vf03, 0x00(%0)     \n\t"
+            "vmr32   $vf04, $vf03        \n\t"
+            "vsub.xy $vf01, $vf01, $vf03 \n\t"
+            "vmr32   $vf04, $vf04        \n\t"
+            "vmul.zw $vf01, $vf01, $vf03 \n\t"
+            "vmul.xy $vf01, $vf01, $vf04 \n\t"
+            "vadd.xy $vf01, $vf01, $vf03 \n\t"
+        : : "r"(&ppspr->zoom) : "memory");
+    }
+
+    asm volatile(
+        "vadd.xy $vf01, $vf01, $vf02 \n\t"
+        "lw      $9,    0x00(%1)     \n\t"
+        "vmr32   $vf03, $vf01        \n\t"
+        "vmr32   $vf03, $vf03        \n\t"
+        "vadd.zw $vf01, $vf01, $vf03 \n\t"
+        "vftoi4  $vf01, $vf01        \n\t"
+        "qmfc2   $8,    $vf01        \n\t"
+        "ppach   $8,    $0,    $8    \n\t"
+        "pextlw  $10,   $9,    $8    \n\t"
+        "sd      $10,   0x28(%0)     \n\t"
+        "dsrl    $8,    $8,    32    \n\t"
+        "pextlw  $10,   $9,    $8    \n\t"
+        "sd      $10,   0x38(%0)     \n\t"
+    : : "r"(sp), "r"(&ppspr->zdepth) : "$8", "$9", "$10", "memory");
+
+    ((SprTagTF*)*pk) = sp + 1;
+}
+
+void PkNSprite_AddAdj(SPR_PKT pk, SPR_PRM *ppspr, int flg) {
+    SprTagTF *sp = (SprTagTF*)*pk;
+
+    ((u_long*)sp->GifCord)[0] = 0x6400000000008001;
+    ((u_long*)sp->GifCord)[1] = 0x434310;
+
+    sp->prim = SCE_GS_SET_PRIM(6, 0, 1, 0, 1, 0, 1, 0, 0);
+    sp->rgba = ppspr->rgba0;
+
+    if (flg & 0x1) {
+        asm volatile("lq $9, 0x20(%0)" : : "r"(ppspr) : "$9", "memory");
+    } else {
+        asm volatile("lq $9, 0x00(%0)" : : "r"(ppspr) : "$9", "memory");
+    }
+
+    asm volatile(
+        "lq     $8,  0x20(%1)  \n\t"
+        "li     $10, 0x7       \n\t"
+        "daddu  $9,  $0,  $8   \n\t"
+        "pcpyld $8,  $8,  $0   \n\t"
+        "paddw  $9,  $8,  $9   \n\t"
+        "psllw  $9,  $9,  0x4  \n\t"
+        "li     $8,  0x8       \n\t"
+        "pextlw $8,  $10, $8   \n\t"
+        "pextlw $8,  $8,  $8   \n\t"
+        "paddw  $8,  $9,  $8   \n\t"
+        "ppach  $9,  $0,  $8   \n\t"
+        "sd     $9,  0x20(%0)  \n\t"
+        "prot3w $10, $9        \n\t"
+        "sd     $10, 0x30(%0)  \n\t"
+    : : "r"(sp), "r"(ppspr) : "$8", "$9", "$10", "memory");
+
+    asm volatile(
+        "lqc2    $vf01, 0x00(%0)     \n\t"
+        "lqc2    $vf02, 0x10(%0)     \n\t"
+        "vitof0  $vf01, $vf01        \n\t"
+        "vmul.zw $vf01, $vf01, $vf02 \n\t"
+    : : "r"(ppspr) : "memory");
+
+    if ((flg & 0x2) && ppspr->zoom.isOn) {
+        asm volatile(
+            "lqc2    $vf03, 0x00(%0)     \n\t"
+            "vmr32   $vf04, $vf03        \n\t"
+            "vsub.xy $vf01, $vf01, $vf03 \n\t"
+            "vmr32   $vf04, $vf04        \n\t"
+            "vmul.zw $vf01, $vf01, $vf03 \n\t"
+            "vmul.xy $vf01, $vf01, $vf04 \n\t"
+            "vadd.xy $vf01, $vf01, $vf03 \n\t"
+        : : "r"(&ppspr->zoom) : "memory");
+    }
+
+    asm volatile(
+        "vadd.xy $vf01, $vf01, $vf02 \n\t"
+        "lw      $9,    0x00(%1)     \n\t"
+        "vmr32   $vf03, $vf01        \n\t"
+        "vmr32   $vf03, $vf03        \n\t"
+        "vadd.zw $vf01, $vf01, $vf03 \n\t"
+        "vftoi4  $vf01, $vf01        \n\t"
+        "qmfc2   $8,    $vf01        \n\t"
+        "ppach   $8,    $0,    $8    \n\t"
+        "pextlw  $10,   $9,    $8    \n\t"
+        "sd      $10,   0x28(%0)     \n\t"
+        "dsrl    $8,    $8,    32    \n\t"
+        "pextlw  $10,   $9,    $8    \n\t"
+        "sd      $10,   0x38(%0)     \n\t"
+    : : "r"(sp), "r"(&ppspr->zdepth) : "$8", "$9", "$10", "memory");
+
+    ((SprTagTF*)*pk) = sp + 1;
+}
+
+void PkCRect_Add(SPR_PKT pk, SPR_PRM *ppspr, int flg) {
+    SprTagCF *sp = (SprTagCF*)*pk;
+
+    ((u_long*)sp->GifCord)[0] = 0x4400000000008001;
+    ((u_long*)sp->GifCord)[1] = 0x4410;
+
+    sp->prim = 0x146;
+    sp->rgba = ppspr->rgba0;
+
+    asm volatile(
+        "lqc2    $vf01, 0x00(%0)     \n\t"
+        "lqc2    $vf02, 0x10(%0)     \n\t"
+        "vitof0  $vf01, $vf01        \n\t"
+        "vmul.zw $vf01, $vf01, $vf02 \n\t"
+    : : "r"(ppspr) : "memory");
+
+    if ((flg & 0x2) && ppspr->zoom.isOn) {
+        asm volatile(
+            "lqc2    $vf03, 0x00(%0)     \n\t"
+            "vmr32   $vf04, $vf03        \n\t"
+            "vsub.xy $vf01, $vf01, $vf03 \n\t"
+            "vmr32   $vf04, $vf04        \n\t"
+            "vmul.zw $vf01, $vf01, $vf03 \n\t"
+            "vmul.xy $vf01, $vf01, $vf04 \n\t"
+            "vadd.xy $vf01, $vf01, $vf03 \n\t"
+        : : "r"(&ppspr->zoom) : "memory");
+    }
+
+    asm volatile(
+        "vadd.xy $vf01, $vf01, $vf02 \n\t"
+        "lw      $9,    0x00(%1)     \n\t"
+        "vmr32   $vf03, $vf01        \n\t"
+        "vmr32   $vf03, $vf03        \n\t"
+        "vadd.zw $vf01, $vf01, $vf03 \n\t"
+        "vftoi4  $vf01, $vf01        \n\t"
+        "qmfc2   $8,    $vf01        \n\t"
+        "ppach   $8,    $0,    $8    \n\t"
+        "pextlw  $10,   $9,    $8    \n\t"
+        "sd      $10,   0x20(%0)     \n\t"
+        "dsrl    $8,    $8,    32    \n\t"
+        "pextlw  $10,   $9,    $8    \n\t"
+        "sd      $10,   0x28(%0)     \n\t"
+    : : "r"(sp), "r"(&ppspr->zdepth) : "$8", "$9", "$10", "memory");
+
+    ((SprTagCF*)*pk) = sp + 1;
+}
 
 void PkCGRect_Add(SPR_PKT pk, SPR_PRM *ppspr, int flg) {
     SprTagCG *sp = (SprTagCG*)*pk;
@@ -725,61 +904,58 @@ void PkCGRect_Add(SPR_PKT pk, SPR_PRM *ppspr, int flg) {
     ((SprTagCG*)*pk) = sp + 1;
 }
 
-extern float S5432[4]; /* see SCE's libvu0 */
+asm("
+.data
+.align 4
+S5432:
+    .word 0x362e9c14, 0xb94fb21f, 0x3c08873e, 0xbe2aaaa4
+.text
+");
 
 static void rotcossin(float rot) {
     asm volatile(
-        "mtc1      $0,    $f0                \n\t"
-        "c.olt.s   %0,    $f0                \n\t"
-        "lwc1      $f0,   FLT_003990DC       \n\t" /* li.s $f0, 1.57079637050628662109e0 */
-        "bc1f      _RotCosSin_01             \n\t"
-        "add.s     %0,    $f0,   %0          \n\t" /* rx += (pi/2) */
-        "li        $7,    1                  \n\t"
-        "j         _RotCosSin_02             \n\t"
-
-"_RotCosSin_01:                              \n\t"
-        "sub.s     %0,    $f0,   %0          \n\t" /* rx = (pi/2)-rx */
-        "move      $7,    $0                 \n\t"
-
-"_RotCosSin_02:                              \n\t"
-        "mfc1      $8,    %0                 \n\t"
-        "qmtc2     $8,    $vf03              \n\t"
-
-        "la        $8,    S5432              \n\t" /* Transfer coefficients of S5-S2 to VF05 */
-        "lqc2      $vf01, 0($8)              \n\t"
-
-        "vmr32.w   $vf03, $vf03              \n\t" /* Copy VF03.x(v) to VF03.w */
-        "vaddx.x   $vf04, $vf00, $vf03       \n\t" /* Copy VF03.x(v) to VF04.x */
-        "vmul.x    $vf03, $vf03, $vf03       \n\t" /* Square VF03.x to v^2 */
-        "vmulx.yzw $vf04, $vf04, $vf00       \n\t" /* VF04.yzw = 0 */
-        "vmulw     $vf02, $vf01, $vf03       \n\t" /* Apply VF03.w(v) to S2-S5 */
-        "vmulx     $vf02, $vf02, $vf03       \n\t" /* Multiply by VF03.x(v^2) */
-        "vmulx.xyz $vf02, $vf02, $vf03       \n\t" /* Multiply by VF03.x(v^2) */
-        "vaddw.x   $vf04, $vf04, $vf02       \n\t" /* s += k2 */
-        "vmulx.xy  $vf02, $vf02, $vf03       \n\t" /* Multiply by VF03.x(v^2) */
-        "vaddz.x   $vf04, $vf04, $vf02       \n\t" /* s += z */
-        "vmulx.x   $vf02, $vf02, $vf03       \n\t" /* Multiply by VF03.x(v^2) */
-        "vaddy.x   $vf04, $vf04, $vf02       \n\t" /* s += y */
-        "vaddx.x   $vf04, $vf04, $vf02       \n\t" /* s += x (sin is over) */
-        "vaddx.xy  $vf04, $vf19, $vf04       \n\t" /* .xy = s (append) */
-        "vmul.x    $vf05, $vf04, $vf04       \n\t" /* VF05.x = s*s */
-        "vsubx.w   $vf05, $vf00, $vf05       \n\t" /* VF05.w = 1-(s*s) */
-
-        "vsqrt     Q,     $vf05w             \n\t" /* Q = sqrt(1-s*s) (cos is over) */
-        "vwaitq                              \n\t"
-
-        "cfc2      $8,    $vi22              \n\t"
-        "qmtc2     $8,    $vf05              \n\t"
-
-        "bne       $7,    $0,    _rcossin_01 \n\t"
-
-        "vaddx.x   $vf04, $vf19, $vf05       \n\t" /* VF04.x = s */
-        "b         _rcossin_02               \n\t"
-
-"_rcossin_01:                                \n\t"
-        "vsubx.x   $vf04, $vf19, $vf05       \n\t" /* VF04.x = s */
-"_rcossin_02:                                \n\t"
-    : : "f"(rot) : "$7", "$8", "memory");
+        "mtc1      $0,    $f0                      \n\t"
+        "c.olt.s   %0,    $f0                      \n\t"
+        "li.s      $f0,   1.57079637050628662109e0 \n\t"
+        "bc1f      _RotCosSin_01                   \n\t"
+        "add.s     %0,    $f0,   %0                \n\t" /* rx += (pi/2) */
+        "li        $7,    1                        \n\t"
+        "j         _RotCosSin_02                   \n\t"
+"_RotCosSin_01:                                    \n\t"
+        "sub.s     %0,    $f0,   %0                \n\t" /* rx = (pi/2)-rx */
+        "move      $7,    $0                       \n\t"
+"_RotCosSin_02:                                    \n\t"
+        "mfc1      $8,    %0                       \n\t"
+        "qmtc2     $8,    $vf03                    \n\t"
+        "la        $8,    S5432                    \n\t" /* Transfer coefficients of S5-S2 to VF05 */
+        "lqc2      $vf01, 0($8)                    \n\t"
+        "vmr32.w   $vf03, $vf03                    \n\t" /* Copy VF03.x(v) to VF03.w */
+        "vaddx.x   $vf04, $vf00, $vf03             \n\t" /* Copy VF03.x(v) to VF04.x */
+        "vmul.x    $vf03, $vf03, $vf03             \n\t" /* Square VF03.x to v^2 */
+        "vmulx.yzw $vf04, $vf04, $vf00             \n\t" /* VF04.yzw = 0 */
+        "vmulw     $vf02, $vf01, $vf03             \n\t" /* Apply VF03.w(v) to S2-S5 */
+        "vmulx     $vf02, $vf02, $vf03             \n\t" /* Multiply by VF03.x(v^2) */
+        "vmulx.xyz $vf02, $vf02, $vf03             \n\t" /* Multiply by VF03.x(v^2) */
+        "vaddw.x   $vf04, $vf04, $vf02             \n\t" /* s += k2 */
+        "vmulx.xy  $vf02, $vf02, $vf03             \n\t" /* Multiply by VF03.x(v^2) */
+        "vaddz.x   $vf04, $vf04, $vf02             \n\t" /* s += z */
+        "vmulx.x   $vf02, $vf02, $vf03             \n\t" /* Multiply by VF03.x(v^2) */
+        "vaddy.x   $vf04, $vf04, $vf02             \n\t" /* s += y */
+        "vaddx.x   $vf04, $vf04, $vf02             \n\t" /* s += x (sin is over) */
+        "vaddx.xy  $vf04, $vf19, $vf04             \n\t" /* .xy = s (append) */
+        "vmul.x    $vf05, $vf04, $vf04             \n\t" /* VF05.x = s*s */
+        "vsubx.w   $vf05, $vf00, $vf05             \n\t" /* VF05.w = 1-(s*s) */
+        "vsqrt     Q,     $vf05w                   \n\t" /* Q = sqrt(1-s*s) (cos is over) */
+        "vwaitq                                    \n\t"
+        "cfc2      $8,    $vi22                    \n\t"
+        "qmtc2     $8,    $vf05                    \n\t"
+        "bne       $7,    $0,    _rcossin_01       \n\t"
+        "vaddx.x   $vf04, $vf19, $vf05             \n\t" /* VF04.x = s */
+        "b         _rcossin_02                     \n\t"
+"_rcossin_01:                                      \n\t"
+        "vsubx.x   $vf04, $vf19, $vf05             \n\t" /* VF04.x = s */
+"_rcossin_02:                                      \n\t"
+    : : "f"(rot) : "$7", "$8", "$f0", "memory");
 }
 
 void _pkVU0RotMatrixZ(float rz) {
@@ -802,7 +978,131 @@ void _pkVU0RotMatrixZ(float rz) {
     );
 }
 
-INCLUDE_ASM("asm/nonmatchings/menu/pksprite", PkRSprite_Add);
+void PkRSprite_Add(SPR_PKT pk, SPR_PRM *ppspr, int flg) {
+    SprTagTFR *sp = (SprTagTFR*)*pk;
+
+    _pkVU0RotMatrixZ(ppspr->rot);
+
+    ((u_long*)sp->GifCord)[0] = 0xa400000000008001;
+    ((u_long*)sp->GifCord)[1] = 0x4343434310;
+
+    sp->prim = 0x154;
+    sp->rgba = ppspr->rgba0;
+
+    if (flg & 0x1) {
+        asm volatile("lq $9, 0x20(%0)" : : "r"(ppspr) : "$9", "memory");
+    } else {
+        asm volatile("lq $9, 0x00(%0)" : : "r"(ppspr) : "$9", "memory");
+    }
+
+    asm volatile(
+        "lq     $8,  0x20(%1) \n\t"
+        "li     $10, -8       \n\t"
+        "daddu  $9,  $0,  $8  \n\t"
+        "pcpyld $8,  $8,  $0  \n\t"
+        "paddw  $9,  $8,  $9  \n\t"
+        "psllw  $9,  $9,  0x4 \n\t"
+        "li     $8,  8        \n\t"
+        "pextlw $8,  $10, $8  \n\t"
+        "pextlw $8,  $8,  $8  \n\t"
+        "paddw  $8,  $9,  $8  \n\t"
+        "ppach  $9,  $0,  $8  \n\t"
+        "sd     $9,  0x20(%0) \n\t"
+        "pexew  $10, $8       \n\t"
+        "ppach  $8,  $0,  $10 \n\t"
+        "sd     $8,  0x30(%0) \n\t"
+        "prot3w $10, $8       \n\t"
+        "sd     $10, 0x40(%0) \n\t"
+        "prot3w $10, $9       \n\t"
+        "sd     $10, 0x50(%0) \n\t"
+    : : "r"(sp), "r"(ppspr) : "$8", "$9", "$10", "memory");
+
+    asm volatile(
+        "lqc2    $vf01, 0x00(%0)     \n\t"
+        "lq      $8,    0x10(%0)     \n\t"
+        "vitof0  $vf01, $vf01        \n\t"
+        "qmtc2   $8,    $vf02        \n\t"
+        "pcpyud  $8,    $8,    $8    \n\t"
+        "qmtc2   $8,    $vf03        \n\t"
+        "lq      $8,    0x30(%0)     \n\t"
+        "pcpyld  $8,    $8,    $8    \n\t"
+        "qmtc2   $8,    $vf04        \n\t"
+        "vmul.xy $vf04, $vf04, $vf03 \n\t"
+    : : "r"(ppspr) : "$8", "memory");
+
+    if ((flg & 0x2) && ppspr->zoom.isOn) {
+        asm volatile(
+            "lq       $8,    0x00(%0)     \n\t"
+            "qmtc2    $8,    $vf05        \n\t"
+            "pcpyud   $8,    $8,    $8    \n\t"
+            "qmtc2    $8,    $vf08        \n\t"
+            "vadda.xy ACC,   $vf01, $vf00 \n\t"
+            "vmadd.xy $vf01, $vf04, $vf08 \n\t"
+            "vmul.zw  $vf01, $vf01, $vf05 \n\t"
+            "vmul.zw  $vf04, $vf04, $vf08 \n\t"
+            "vsub.xy  $vf01, $vf01, $vf05 \n\t"
+            "vadda.xy ACC,   $vf05, $vf00 \n\t"
+            "vmadd.xy $vf01, $vf01, $vf08 \n\t"
+        : : "r"(&ppspr->zoom) : "$8", "memory");
+    } else {
+        asm volatile(
+            "vadd.xy $vf01,$vf01,$vf04"
+        );
+    }
+
+    asm volatile(
+        "vadd.xy $vf08, $vf01, $vf02 \n\t"
+        "vmr32   $vf02, $vf02        \n\t"
+        "vmr32   $vf04, $vf04        \n\t"
+        "vmr32   $vf05, $vf01        \n\t"
+        "vmr32   $vf02, $vf02        \n\t"
+        "vmr32   $vf04, $vf04        \n\t"
+        "vmr32   $vf05, $vf05        \n\t"
+        "lw      $12,   0x00(%1)     \n\t"
+        "vmul.xy $vf06, $vf06, $vf02 \n\t"
+        "vmul.xy $vf07, $vf07, $vf02 \n\t"
+        "vsub.xy $vf09, $vf00, $vf04 \n\t"
+        "vsub.y  $vf10, $vf00, $vf04 \n\t"
+        "vsub.x  $vf10, $vf05, $vf04 \n\t"
+        "vsub.x  $vf11, $vf00, $vf04 \n\t"
+        "vsub.y  $vf11, $vf05, $vf04 \n\t"
+        "vsub.xy $vf12, $vf05, $vf04 \n\t"
+        "vmulax  ACC,   $vf06, $vf09 \n\t"
+        "vmadday ACC,   $vf07, $vf09 \n\t"
+        "vmaddw  $vf09, $vf08, $vf00 \n\t"
+        "vmulax  ACC,   $vf06, $vf10 \n\t"
+        "vmadday ACC,   $vf07, $vf10 \n\t"
+        "vmaddw  $vf10, $vf08, $vf00 \n\t"
+        "vftoi4  $vf09, $vf09        \n\t"
+        "vmulax  ACC,   $vf06, $vf11 \n\t"
+        "vmadday ACC,   $vf07, $vf11 \n\t"
+        "vmaddw  $vf11, $vf08, $vf00 \n\t"
+        "vftoi4  $vf10, $vf10        \n\t"
+        "qmfc2   $8,    $vf09        \n\t"
+        "vmulax  ACC,   $vf06, $vf12 \n\t"
+        "vmadday ACC,   $vf07, $vf12 \n\t"
+        "vmaddw  $vf12, $vf08, $vf00 \n\t"
+        "vftoi4  $vf11, $vf11        \n\t"
+        "qmfc2   $9,    $vf10        \n\t"
+        "ppach   $8,    $0,    $8    \n\t"
+        "pextlw  $8,    $12,   $8    \n\t"
+        "sd      $8,    0x28(%0)     \n\t"
+        "vftoi4  $vf12, $vf12        \n\t"
+        "ppach   $8,    $0,    $9    \n\t"
+        "pextlw  $8,    $12,   $8    \n\t"
+        "sd      $8,    0x38(%0)     \n\t"
+        "qmfc2   $10,   $vf11        \n\t"
+        "ppach   $8,    $0,    $10   \n\t"
+        "pextlw  $8,    $12,   $8    \n\t"
+        "sd      $8,    0x48(%0)     \n\t"
+        "qmfc2   $11,   $vf12        \n\t"
+        "ppach   $8,    $0,    $11   \n\t"
+        "pextlw  $8,    $12,   $8    \n\t"
+        "sd      $8,    0x58(%0)     \n\t"
+    : : "r"(sp), "r"(&ppspr->zdepth) : "$8", "$9", "$10", "$11", "$12", "memory");
+
+    ((SprTagTFR*)*pk) = sp + 1;
+}
 
 void PkCLine2_Add(SPR_PKT pk, SPR_PRM *ppspr, int flg) {
     SprTagLF *sp = (SprTagLF*)*pk;
@@ -866,7 +1166,54 @@ void PkCLine2_Add(SPR_PKT pk, SPR_PRM *ppspr, int flg) {
     ((SprTagLF*)*pk) = sp + 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/menu/pksprite", PkCLineS_AddStart);
+void PkCLineS_AddStart(SPR_PKT pk, SPR_PRM *ppspr, int flg) {
+    SprTagLSF *sp = (SprTagLSF*)*pk;
+
+    ((u_long*)sp->GifCord)[0] = 0x2400000000000001;
+    ((u_long*)sp->GifCord)[1] = 0x10;
+
+    ((u_long*)sp->GifCord2)[0] = 0x1000000000008001;
+    ((u_long*)sp->GifCord2)[1] = 0xe;
+
+    if (flg & 0x4) {
+        sp->prim = 0x1ca;
+    } else {
+        sp->prim = 0x14a;
+    }
+
+    sp->rgba = ppspr->rgba0;
+
+    asm volatile(
+        "lqc2   $vf01, 0x00(%0) \n\t"
+        "lqc2   $vf02, 0x10(%0) \n\t"
+        "vitof0 $vf01, $vf01    \n\t"
+    : : "r"(ppspr) : "memory");
+
+    if ((flg & 0x2) && ppspr->zoom.isOn) {
+        asm volatile(
+            "lqc2    $vf03, 0x00(%0)     \n\t"
+            "vmr32   $vf04, $vf03        \n\t"
+            "vsub.xy $vf01, $vf01, $vf03 \n\t"
+            "vmr32   $vf04, $vf04        \n\t"
+            "vmul.xy $vf01, $vf01, $vf04 \n\t"
+            "vadd.xy $vf01, $vf01, $vf03 \n\t"
+        : : "r"(&ppspr->zoom) : "memory");
+    }
+
+    asm volatile(
+        "vadd.xy $vf01, $vf01, $vf02 \n\t"
+        "lw      $9,    0x00(%1)     \n\t"
+        "vftoi4  $vf01, $vf01        \n\t"
+        "qmfc2   $8,    $vf01        \n\t"
+        "ppach   $8,    $0,    $8    \n\t"
+        "pextlw  $10,   $9,    $8    \n\t"
+        "li      $8,    0xd          \n\t"
+        "pcpyld  $10,   $8,    $10   \n\t"
+        "sq      $10,   0x30(%0)     \n\t"
+    : : "r"(sp), "r"(&ppspr->zdepth) : "$8", "$9", "$10", "memory");
+
+    ((SprTagLSF*)*pk) = sp + 1;
+}
 
 void PkCLineS_AddNext(SPR_PKT pk, SPR_PRM *ppspr, int flg) {
     SprTagLSFN *sp = (SprTagLSFN*)*pk;
@@ -906,7 +1253,62 @@ void PkCLineS_AddNext(SPR_PKT pk, SPR_PRM *ppspr, int flg) {
     ((SprTagLSFN*)*pk) = sp + 1;
 }
 
-INCLUDE_ASM("asm/nonmatchings/menu/pksprite", PkPolyF3_Add);
+void PkPolyF3_Add(SPR_PKT pk, SPR_PRM *ppspr, int flg) {
+    SprTagCFR *sp = (SprTagCFR*)*pk;
+
+    ((u_long*)sp->GifCord)[0] = 0x5400000000008001;
+    ((u_long*)sp->GifCord)[1] = 0x44410;
+
+    sp->prim = 0x143;
+    sp->rgba = ppspr->rgba0;
+
+    asm volatile(
+        "lqc2    $vf01, 0x50(%0)     \n\t"
+        "lqc2    $vf02, 0x60(%0)     \n\t"
+        "lqc2    $vf04, 0x10(%0)     \n\t"
+        "vmr32   $vf03, $vf04        \n\t"
+        "vmr32   $vf03, $vf03        \n\t"
+        "vadd.xy $vf03, $vf00, $vf04 \n\t"
+    : : "r"(ppspr) : "memory");
+
+    if ((flg & 0x2) && ppspr->zoom.isOn) {
+        asm volatile(
+            "lqc2    $vf04, 0x00(%0)     \n\t"
+            "vmr32   $vf05, $vf04        \n\t"
+            "lqc2    $vf06, 0x00(%0)     \n\t"
+            "vmr32   $vf05, $vf05        \n\t"
+            "vadd.xy $vf04, $vf00, $vf05 \n\t"
+            "vadd.xy $vf05, $vf00, $vf06 \n\t"
+            "vsub    $vf01, $vf01, $vf05 \n\t"
+            "vsub    $vf02, $vf02, $vf05 \n\t"
+            "vmul    $vf01, $vf01, $vf04 \n\t"
+            "vmul    $vf02, $vf02, $vf04 \n\t"
+            "vadd    $vf01, $vf01, $vf05 \n\t"
+            "vadd    $vf02, $vf02, $vf05 \n\t"
+        : : "r"(&ppspr->zoom) : "memory");
+    }
+
+    asm volatile(
+        "vadd   $vf01, $vf01, $vf03 \n\t"
+        "lw     $9,    0x00(%1)     \n\t"
+        "vftoi4 $vf01, $vf01        \n\t"
+        "vadd   $vf02, $vf02, $vf03 \n\t"
+        "qmfc2  $8,    $vf01        \n\t"
+        "ppach  $8,    $0,    $8    \n\t"
+        "pextlw $10,   $9,    $8    \n\t"
+        "sd     $10,   0x20(%0)     \n\t"
+        "dsrl   $8,    $8,    32    \n\t"
+        "pextlw $10,   $9,    $8    \n\t"
+        "sd     $10,   0x28(%0)     \n\t"
+        "vftoi4 $vf02, $vf02        \n\t"
+        "qmfc2  $8,    $vf02        \n\t"
+        "ppach  $8,    $0,    $8    \n\t"
+        "pextlw $10,   $9,    $8    \n\t"
+        "sd     $10,   0x30(%0)     \n\t"
+    : : "r"(sp), "r"(&ppspr->zdepth) : "$8", "$9", "$10", "memory");
+
+    ((SprTagCFR*)*pk) = sp + 1;
+}
 
 void PkPolyF4_Add(SPR_PKT pk, SPR_PRM *ppspr, int flg) {
     SprTagCFR *sp = (SprTagCFR*)*pk;
