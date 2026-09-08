@@ -1,15 +1,15 @@
 {
   "measures": {
-    "fuzzy_match_percent": 62.85073,
+    "fuzzy_match_percent": 63.29948,
     "total_code": "342284",
-    "matched_code": "215128",
-    "matched_code_percent": 62.85073,
+    "matched_code": "216664",
+    "matched_code_percent": 63.299484,
     "total_data": "26260848",
     "matched_data": "26148072",
     "matched_data_percent": 99.57056,
     "total_functions": 1429,
-    "matched_functions": 1132,
-    "matched_functions_percent": 79.21623,
+    "matched_functions": 1140,
+    "matched_functions_percent": 79.77607,
     "total_units": 70
   },
   "units": [
@@ -6828,16 +6828,16 @@
     {
       "name": "menu/menusub",
       "measures": {
-        "fuzzy_match_percent": 26.137785,
+        "fuzzy_match_percent": 28.225763,
         "total_code": "73564",
-        "matched_code": "19228",
-        "matched_code_percent": 26.137785,
+        "matched_code": "20764",
+        "matched_code_percent": 28.225761,
         "total_data": "51456",
         "matched_data": "38576",
         "matched_data_percent": 74.9689,
         "total_functions": 165,
-        "matched_functions": 95,
-        "matched_functions_percent": 57.575756,
+        "matched_functions": 103,
+        "matched_functions_percent": 62.424244,
         "total_units": 1
       },
       "sections": [
@@ -6875,7 +6875,7 @@
         {
           "name": ".text",
           "size": "73904",
-          "fuzzy_match_percent": 26.137785,
+          "fuzzy_match_percent": 28.225763,
           "metadata": {}
         }
       ],
@@ -7035,6 +7035,7 @@
         {
           "name": "TsCmnPkClose",
           "size": "96",
+          "fuzzy_match_percent": 100.0,
           "metadata": {},
           "address": "2928"
         },
@@ -7083,6 +7084,7 @@
         {
           "name": "TSNumMov",
           "size": "208",
+          "fuzzy_match_percent": 100.0,
           "metadata": {},
           "address": "4288"
         },
@@ -7143,6 +7145,7 @@
         {
           "name": "TsCheckEnding",
           "size": "200",
+          "fuzzy_match_percent": 100.0,
           "metadata": {},
           "address": "6984"
         },
@@ -7218,6 +7221,7 @@
         {
           "name": "TsSetRanking2UData",
           "size": "228",
+          "fuzzy_match_percent": 100.0,
           "metadata": {},
           "address": "10192"
         },
@@ -7333,6 +7337,7 @@
         {
           "name": "MpCityHallFPHOK",
           "size": "208",
+          "fuzzy_match_percent": 100.0,
           "metadata": {},
           "address": "24560"
         },
@@ -7476,6 +7481,7 @@
         {
           "name": "TsANIME_Poll",
           "size": "200",
+          "fuzzy_match_percent": 100.0,
           "metadata": {},
           "address": "33672"
         },
@@ -7604,6 +7610,7 @@
         {
           "name": "TsJukeIsObjAnime",
           "size": "164",
+          "fuzzy_match_percent": 100.0,
           "metadata": {},
           "address": "48544"
         },
@@ -7640,6 +7647,7 @@
         {
           "name": "TsJukeMenu_Draw",
           "size": "232",
+          "fuzzy_match_percent": 100.0,
           "metadata": {},
           "address": "53128"
         },
@@ -13699,16 +13707,16 @@
     {
       "id": "menu",
       "measures": {
-        "fuzzy_match_percent": 50.639084,
+        "fuzzy_match_percent": 51.976456,
         "total_code": "114852",
-        "matched_code": "58160",
-        "matched_code_percent": 50.63908,
+        "matched_code": "59696",
+        "matched_code_percent": 51.976456,
         "total_data": "93716",
         "matched_data": "45108",
         "matched_data_percent": 48.132656,
         "total_functions": 374,
-        "matched_functions": 300,
-        "matched_functions_percent": 80.213905,
+        "matched_functions": 308,
+        "matched_functions_percent": 82.35294,
         "total_units": 9
       }
     },

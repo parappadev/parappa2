@@ -1504,6 +1504,7 @@ scstPos_tmp_274                     = 0x00399aec;
 curTag_tmp_275                      = 0x00399af0;
 fphs_pos_tmp_276                    = 0x00399af4;
 AnmBit_tmp_277                      = 0x00399af8;
+state_tmp_296                       = 0x00399afc;
 _bMapCaptureReq                     = 0x00399b1c;
 pP3GameState                        = 0x00399b18;
 _MNwaitTime                         = 0x00399b20;
@@ -1545,6 +1546,7 @@ MnLPkt                              = 0x01c7f6e0; // size:0xa0
 FPacket                             = 0x01c7f780; // size:0x10
 MCMesWork                           = 0x01c7f790; // size:0x34
 CmpMesWork                          = 0x01c7f7c8; // size:0x18
+JukeMenu                            = 0x01c7fb48; // size:0x1414
 UserListMenu                        = 0x01c80fb0; // size:0x118
 ScFade                              = 0x01c810c8; // size:0x14
 

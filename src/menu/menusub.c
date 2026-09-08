@@ -178,7 +178,7 @@
 // /* bss 1c7f7e0 */ static RANKLIST RankLst[20];
 // /* bss 1c7f970 */ static POPUP_MENU PopupMenu;
 // /* bss 1c7fa88 */ static SAVE_MENU SaveMenu;
-// /* bss 1c7fb48 */ static JUKE_MENU JukeMenu;
+/* bss 1c7fb48 */ extern JUKE_MENU JukeMenu; /* static */
 // /* bss 1c80f60 */ static OPTION_MENU OptionMenu;
 /* bss 1c80fb0 */ extern USERLIST_MENU UserListMenu; /* static */
 /* bss 1c810c8 */ extern SCFADE ScFade; /* static */
@@ -208,7 +208,7 @@ static void  TsCmnPkClose(sceGifPacket *pgifpk, void *pk, int pri);
 static void  TsClearMenuPad(int no);
 static void  TsGetMenuPad(int no, u_int *getpad);
 static void  TsSndFlow(int flg);
-/* static */ int   TSNumMov(int cn, int dn, int scale);
+static int   TSNumMov(int cn, int dn, int scale);
 static int   TSLOOP(int no, int max);
 static int   TSLIMIT(int no, int min, int max);
 static int   TsMENU_GetMapNo(int *psize);
@@ -218,7 +218,7 @@ static void  TsSet_ParappaCapColor(void);
 /* static */ void  TsClearSet(P3GAMESTATE *pstate);
 static void  TsCheckEnding(P3GAMESTATE *pstate);
 /* static */ void  TsSetRankingName(P3MC_STAGERANK *pRankTop, u_char *name);
-/* static */ void  TsSetRanking2UData(USER_DATA *puser, P3MC_STAGERANK *wkRank);
+static void  TsSetRanking2UData(USER_DATA *puser, P3MC_STAGERANK *wkRank);
 /* static */ void  TsSetSaveData(MCRWDATA_HDL *pDataW, int mode, USER_DATA *puser);
 /* static */ void  TsRestoreSaveData(MCRWDATA_HDL *pDataW, int mode);
 /* static */ int   TsRanking_Set(void);
@@ -232,9 +232,9 @@ static int   MpCityHall_Flow(int flg, u_int tpad, u_int tpad2);
 /* static */ void  MpCityHallParaStart(int pos);
 static void  MpCityHallFPHSSoundMask(int flg);
 /* static */ int   MpCityHallFPHSMove(int pos, int fpos);
-/* static */ void  MpCityHallFPHOK(int flg);
+static void  MpCityHallFPHOK(int flg);
 /* static */ void  MpCityHallCharPosSet(int pos);
-/* static */ int   MpPopMenu_Flow(int flg, u_int tpad);
+static int   MpPopMenu_Flow(int flg, u_int tpad);
 /* static */ int   MpMapMenu_Flow(int flg, MAPPOS *mpw, u_int tpad);
 static int   _MapGetMovableDir(MAPPOS *mpw);
 /* static */ int   McErrorMess(int err);
@@ -250,7 +250,7 @@ static int   TsMCAMes_IsON(void);
 /* static */ void  TsMCAMes_Draw(SPR_PKT pk, SPR_PRM *spr);
 static void  TsCMPMes_Draw(SPR_PKT pk, SPR_PRM *spr);
 static void  TsANIME_Init(ANIME_WK *wk);
-/* static */ int   TsANIME_Poll(ANIME_WK *wk);
+static int   TsANIME_Poll(ANIME_WK *wk);
 static void  TsANIME_Start(ANIME_WK *wk, int state, int tim);
 static int   TsANIME_GetRate(ANIME_WK *wk, float *rt0, float *rt1, float *rt2);
 /* static */ void  _TsSortSetRanking(P3MC_RANKSCORE **ptRank, int n, P3MC_RANKSCORE *pRank, int bNameCmp);
@@ -263,13 +263,13 @@ static void  TSJukeCDObj_Init(JUKECDOBJ *pw, int pno);
 /* static */ void  _TsJkJacketPut(SPR_PKT pk, SPR_PRM *spr, JUKECDOBJ *pw, int px, int py, float zx, float rot, u_int abgr, u_int abgrs);
 /* static */ void  _TsJkRecordPut(SPR_PKT pk, SPR_PRM *spr, JUKECDOBJ *pw, int px, int py, float zr, float rrot, u_int abgr, u_int abgrs);
 /* static */ void  TSJukeCDObj_Draw(SPR_PKT pk, SPR_PRM *spr, JUKECDOBJ *pw, int px, int py, int anmtime);
-/* static */ int   TsJukeIsObjAnime(int isComp);
+static int   TsJukeIsObjAnime(int isComp);
 /* static */ int   TsJukeObjAnime(int isOut);
 /* static */ int   TsJukeObjAnime2(int isOut);
 /* static */ int   _TsJKMoveCus(int *cx, int *cy, int mx, int my, JUKECDOBJ *cobj);
 /* static */ void  _TsJKSetPadArrow(int sel, JUKECDOBJ *cobj);
 /* static */ int   TsJukeMenu_Flow(int flg, u_int tpad);
-/* static */ void  TsJukeMenu_Draw(SPR_PKT pk, SPR_PRM *spr);
+static void  TsJukeMenu_Draw(SPR_PKT pk, SPR_PRM *spr);
 static void  TsCmnCell_CusorSET(CELLOBJ *obj);
 static void  TsCmnCell_CusorON(CELLOBJ *obj);
 static void  TsCmnCell_CusorOFF(CELLOBJ *obj);
@@ -582,10 +582,9 @@ static void* TsCmnPkOpen(sceGifPacket *pgifpk) {
     return pgifpk->pCurrent;
 }
 
-#if 1
-INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsCmnPkClose);
-#else
-/* Needs .rodata match */
+INCLUDE_RODATA("asm/nonmatchings/menu/menusub", D_00395F10);
+INCLUDE_RODATA("asm/nonmatchings/menu/menusub", D_00395F20);
+
 static void TsCmnPkClose(sceGifPacket *pgifpk, void *pk, int pri) {
     u_long giftag[2] = { 0x1000000000008000, 0xe };
 
@@ -593,7 +592,6 @@ static void TsCmnPkClose(sceGifPacket *pgifpk, void *pk, int pri) {
     sceGifPkOpenGifTag(pgifpk, *(u_long128*)giftag);
     CmnGifCloseCmnPk(pgifpk, pri);
 }
-#endif
 
 int _P3DATA_SIZE(int mode) {
     u_int size;
@@ -784,7 +782,56 @@ static void TsSndFlow(int flg) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/menu/menusub", TSNumMov);
+static int TSNumMov(int cn, int dn, int scale) {
+    int d;
+    int dv;
+    int da;
+
+    d = cn - dn;
+    if (d != 0) {
+        da = abs(d);
+
+        switch (scale) {
+        case 0:
+            dv = (da - (da >> 3)) + 1;
+            scale = 1;
+            break;
+        case 1:
+            dv = (da - (da >> 2)) + 1;
+            break;
+        case 2:
+            dv = (da >> 1) + 1;
+            scale = 1;
+            break;
+        default:
+            dv = (da >> 2) + 1;
+            scale -= 2;
+            break;
+        }
+
+        if (scale >= 2) {
+            dv = ((dv * 16) - dv) / (scale * 10);
+        }
+
+        if (dv == 0) {
+            dv = 1;
+        }
+
+        if (d < 0) {
+            cn += dv;
+            if (cn > dn) {
+                cn = dn;
+            }
+        } else {
+            cn -= dv;
+            if (cn < dn) {
+                cn = dn;
+            }
+        }
+    }
+
+    return cn;
+}
 
 float TSNumRBack(float rt, float bkrt) {
     float hrt = bkrt + 1.0f;
@@ -954,22 +1001,14 @@ static void TsSet_ParappaCapColor(void) {
     MenuRoundTim2Trans(n);
 }
 
-INCLUDE_RODATA("asm/nonmatchings/menu/menusub", D_00395F10);
-INCLUDE_RODATA("asm/nonmatchings/menu/menusub", D_00395F20);
-INCLUDE_RODATA("asm/nonmatchings/menu/menusub", D_00395F30);
-
 INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsClearSet);
 
-#ifndef NON_MATCHING
-INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsCheckEnding);
-#else
-static void TsCheckEnding(/* !a0 4 */ P3GAMESTATE *pstate) {
-    /* !a2 6 */ int nRound;
-    /* !t3 11 */ int nStage;
-    /* !a2 6 */ int i;
-    /* !a3 7 */ int flg;
-
-    int *pClrCount;
+static void TsCheckEnding(P3GAMESTATE *pstate) {
+    int        nRound;
+    int        nStage;
+    int        i;
+    int        flg;
+    P3LOG_VAL *pLog; /* note: not in STABS. */
 
     nRound = pstate->pLog->nRound;
     nStage = pstate->nStage - 1;
@@ -980,9 +1019,9 @@ static void TsCheckEnding(/* !a0 4 */ P3GAMESTATE *pstate) {
     }
 
     flg = 0;
-    pClrCount = pstate->pLog->clrCount;
-    for (i = 0; i < PR_ARRAYSIZE(pstate->pLog->clrCount); i++) {
-        if (pClrCount[i] >= (nRound + 1)) {
+    pLog = pstate->pLog;
+    for (i = 0; i < PR_ARRAYSIZE(pLog->clrCount); i++) {
+        if (pLog->clrCount[i] >= (nRound + 1)) {
             flg++;
         }
     }
@@ -990,7 +1029,7 @@ static void TsCheckEnding(/* !a0 4 */ P3GAMESTATE *pstate) {
     pstate->endingGame = 0;
 
     if ((flg % 2) != 0) {
-        if (pClrCount[nStage] < (nRound + 1)) {
+        if (pLog->clrCount[nStage] < (nRound + 1)) {
             pstate->endingGame = (flg / 2) + 2;
             if (pstate->endingGame > 4) {
                 pstate->endingGame = 4;
@@ -999,12 +1038,11 @@ static void TsCheckEnding(/* !a0 4 */ P3GAMESTATE *pstate) {
     }
 
     if (flg == 7) {
-        if (pClrCount[nStage] < (nRound + 1)) {
+        if (pLog->clrCount[nStage] < (nRound + 1)) {
             pstate->endingGame = 1;
         }
     }
 }
-#endif
 
 void TsMENU_InitSystem(void) {
     int i;
@@ -1324,7 +1362,13 @@ void TsMenu_Draw(void) {
 
 INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsSetRankingName);
 
-INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsSetRanking2UData);
+static void TsSetRanking2UData(USER_DATA *puser, P3MC_STAGERANK *wkRank) {
+    int i;
+
+    for (i = 0; i < PR_ARRAYSIZE(puser->stageRank); i++) {
+        puser->stageRank[i] = wkRank[i];
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsSetSaveData);
 
@@ -2387,11 +2431,83 @@ static void MpCityHallFPHSSoundMask(int flg) {
 
 INCLUDE_ASM("asm/nonmatchings/menu/menusub", MpCityHallFPHSMove);
 
-INCLUDE_ASM("asm/nonmatchings/menu/menusub", MpCityHallFPHOK);
+static void MpCityHallFPHOK(int flg) {
+    int n;
+
+    TSSNDMASK_CHAN(3, flg);
+
+    switch (flg) {
+    case 0:
+        n = 0x10;
+        break;
+    case 1:
+        n = 0x11;
+        break;
+    case 2:
+    default:
+        n = 0x12;
+        break;
+    }
+
+    if (!TsAnimeWait_withKeySkip(0, &MNS_CityHall, 1, 6)) {
+        MNScene_ContinueAnime(&MNS_CityHall, 1, NULL);
+        MNScene_StartAnime(&MNS_CityHall, -1, &CityHallAnime[n]);
+    } else {
+        MNScene_ContinueAnime(&MNS_CityHall, -1, &CityHallAnime[n]);
+    }
+}
 
 INCLUDE_ASM("asm/nonmatchings/menu/menusub", MpCityHallCharPosSet);
 
+#ifndef NON_MATCHING
 INCLUDE_ASM("asm/nonmatchings/menu/menusub", MpPopMenu_Flow);
+#else
+/* short loop */
+static int MpPopMenu_Flow(int flg, u_int tpad) {
+    /* sbss 399afc */ extern int state_tmp_296;
+    int ret;
+    int mpsize;
+
+    if (flg == 1) {
+        state_tmp_296 = 0;
+        return 0;
+    }
+
+    switch (state_tmp_296) {
+    case 0:
+        state_tmp_296 = 0x1000;
+        break;
+    case 0x1000:
+        TsMENU_GetMapNo(&mpsize);
+        TsPopMenu_Flow(1, mpsize);
+        state_tmp_296 = 0x1010;
+    /* fallthrough */
+    case 0x1010:
+        ret = TsPopMenu_Flow(0, tpad);
+        if (ret == 0) {
+            break;
+        }
+
+        TsPopMenu_Flow(2, 0);
+
+        if (ret == -1) {
+            state_tmp_296 = 0xf000;
+            break;
+        }
+
+        if (ret < 0) {
+            state_tmp_296 = 0xf000;
+            break;
+        }
+
+        return ret;
+    case 0xf000:
+        return -1;
+    }
+
+    return 0;
+}
+#endif
 
 INCLUDE_ASM("asm/nonmatchings/menu/menusub", MpMapMenu_Flow);
 
@@ -2782,7 +2898,31 @@ void TsANIME_Init(ANIME_WK *wk) {
     memset(wk, 0, sizeof(*wk));
 }
 
-INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsANIME_Poll);
+static int TsANIME_Poll(ANIME_WK *wk) {
+    if (wk->atim != 0) {
+        wk->atim--;
+    }
+
+    if (wk->aflg == 0) {
+        return wk->atim;
+    }
+
+    if (!(wk->aflg & 0x1)) {
+        wk->atrn = TSNumMov(wk->atrn, 0, 3);
+        wk->atrn2 = TSNumMov(wk->atrn2, 0, 4);
+        wk->atrn3 = TSNumMov(wk->atrn3, 0, 6);
+    } else {
+        wk->atrn = TSNumMov(wk->atrn, 0, 4);
+        wk->atrn2 = TSNumMov(wk->atrn2, 0, 3);
+        wk->atrn3 = TSNumMov(wk->atrn3, 0, 6);
+    }
+
+    if (wk->atrn == 0 && wk->atrn2 == 0 && wk->atrn3 == 0) {
+        wk->aflg = 0;
+    }
+
+    return wk->atim;
+}
 
 static void TsANIME_Start(ANIME_WK *wk, int state, int tim) {
     wk->atrn2 = 0x200;
@@ -2930,7 +3070,38 @@ INCLUDE_ASM("asm/nonmatchings/menu/menusub", _TsJkRecordPut);
 
 INCLUDE_ASM("asm/nonmatchings/menu/menusub", TSJukeCDObj_Draw);
 
-INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsJukeIsObjAnime);
+static int TsJukeIsObjAnime(int isComp) {
+    int        i;
+    JUKE_MENU *pfw;
+
+    pfw = &JukeMenu;
+
+    for (i = 0; i < PR_ARRAYSIZE(pfw->cusObj); i++) {
+        if (pfw->cusObj[i].bMsk) {
+            continue;
+        }
+
+        if (!isComp) {
+            if (pfw->cusObj[i].anime == TSJKANM_ROTATE) {
+                if (pfw->cusObj[i].atime > 120) {
+                    continue;
+                }
+            }
+
+            if (pfw->cusObj[i].anime == TSJKANM_ROTSTOP) {
+                if (pfw->cusObj[i].atime > 20) {
+                    continue;
+                }
+            }
+        }
+
+        if (pfw->cusObj[i].anime != TSJKANM_OFF) {
+            return TRUE;
+        }
+    }
+
+    return FALSE;
+}
 
 INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsJukeObjAnime);
 
@@ -2942,7 +3113,30 @@ INCLUDE_ASM("asm/nonmatchings/menu/menusub", _TsJKSetPadArrow);
 
 INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsJukeMenu_Flow);
 
-INCLUDE_ASM("asm/nonmatchings/menu/menusub", TsJukeMenu_Draw);
+static void TsJukeMenu_Draw(SPR_PKT pk, SPR_PRM *spr) {
+    JUKE_MENU *pfw;
+    int        i;
+
+    pfw = &JukeMenu;
+
+    spr->zoom.isOn = FALSE;
+    spr->zx = 1.0f;
+    spr->zy = 0.5f;
+
+    PkALPHA_Add(pk, 0x44);
+
+    for (i = 0; i < PR_ARRAYSIZE(pfw->cusObj); i++) {
+        if (i != pfw->selno) {
+            TSJukeCDObj_Draw(pk, spr, &pfw->cusObj[i], 0, 0, pfw->anmTime);
+        }
+    }
+
+    if (pfw->selno < PR_ARRAYSIZEU(pfw->cusObj)) {
+        TSJukeCDObj_Draw(pk, spr, &pfw->cusObj[pfw->selno], 0, 0, pfw->anmTime);
+    }
+
+    spr->zoom.isOn = FALSE;
+}
 
 static void TsCmnCell_CusorSET(CELLOBJ *obj) {
     obj->state = 0;

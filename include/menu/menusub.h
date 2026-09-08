@@ -283,6 +283,38 @@ typedef struct { // 0x44
     /* 0x40 */ float vrate;
 } JUKECDOBJ;
 
+enum {
+    TSJKCUS_MSK = 0,
+    TSJKCUS_DEF = 1,
+    TSJKCUS_CUR = 2,
+    TSJKCUS_ON = 3,
+    TSJKCUS_OFF = 4,
+    TSJKCUS_SELOK = 5
+};
+
+enum {
+    TSJKANM_OFF = 0,
+    TSJKANM_IN = 1,
+    TSJKANM_OUT = 2,
+    TSJKANM_PLAY1 = 3,
+    TSJKANM_RETURN1 = 4,
+    TSJKANM_PLAY2 = 5,
+    TSJKANM_RETURN2 = 6,
+    TSJKANM_ROTATE = 7,
+    TSJKANM_ROTSTOP = 8
+};
+
+typedef struct { // 0x1414
+    /* 0x0000 */ int state;
+    /* 0x0004 */ int exitflg;
+    /* 0x0008 */ int selno;
+    /* 0x000c */ MN_SCENE MNS_StageMapW;
+    /* 0x1160 */ JUKECDOBJ cusObj[10];
+    /* 0x1408 */ int anmTime;
+    /* 0x140c */ int timeV;
+    /* 0x1410 */ int bgmFadeVol;
+} JUKE_MENU;
+
 typedef struct { // 0xc
     /* 0x0 */ int mapNo;
     /* 0x4 */ short anmNo;

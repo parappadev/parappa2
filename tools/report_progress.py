@@ -16,9 +16,9 @@ def save(data, filename):
 
 def getColor(percentage):
     if percentage >= 100:
-        return "green"
-    elif percentage >= 75:
         return "lime"
+    elif percentage >= 75:
+        return "green"
     elif percentage >= 50:
         return "yellow"
     if percentage >= 25:
