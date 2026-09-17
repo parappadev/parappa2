@@ -3,6 +3,7 @@
 #include "main/cdctrl.h"
 
 #include "menu/memc.h"
+#include "menu/menu.h"
 #include "menu/menudata.h"
 #include "menu/menufont.h"
 
@@ -1257,7 +1258,58 @@ void P3MC_SetUserWorkTime(USER_DATA *puser) {
     }
 }
 
-INCLUDE_ASM("asm/nonmatchings/menu/p3mc", P3MC_SaveUser);
+int P3MC_SaveUser(MCRWDATA_HDL *pdhdl, int flg) {
+    P3MC_WORK *pw = &P3MC_Work;
+    u_char    *pData = pdhdl->pMemTop;
+    u_char    *name;
+    int        mode = ((USER_HEADER*)pData)->user.mode;
+    int        stageNo = ((USER_HEADER*)pData)->user.stageNo;
+    int        roundNo = ((USER_HEADER*)pData)->user.roundNo;
+    int        fileNo = ((USER_HEADER*)pData)->user.fileNo;
+    int        isVs = ((USER_HEADER*)pData)->user.isVs;
+    int        ParaCol = 0;
+
+    if (mode == 1) {
+        name = ((USER_HEADER*)pData)->user.name;
+    } else {
+        name = ((USER_HEADER*)pData)->user.name1;
+    }
+
+    if (mode == 1) {
+        P3LOG_VAL *pLog = pdhdl->pData;
+        ParaCol = pLog->nRound;
+        if (ParaCol < 0) {
+            ParaCol = 0;
+        }
+        if (ParaCol > 4) {
+            ParaCol = 4;
+        }
+    }
+
+    _P3MC_SetUserDirName(mode, fileNo);
+    _P3MC_SetBrowsInfo(mode, fileNo, name, stageNo, roundNo, isVs, ParaCol);
+
+    isFileFlgCash = FALSE;
+
+    P3MC_SetUserWorkTime(&pdhdl->pHead->user);
+
+    memcpy(pdhdl->pHead->header, HedderID, 16);
+    memcpy(pdhdl->pHead->footer, FooterID, 16);
+    memcpy(pdhdl->pFoot->footer, FooterID, 16);
+
+    pw->prg = 0;
+
+    pw->data_no = fileNo;
+    pw->data_mode = mode;
+    pw->data_stage = (mode == 1) ? 0 : stageNo;
+
+    pw->prgflag = flg;
+    pw->dhdl = pdhdl;
+    pw->dstat = 0;
+
+    _P3MC_CheckUserDataHead(pw);
+    return 0;
+}
 
 int P3MC_SaveCheck(void) {
     int        re;
